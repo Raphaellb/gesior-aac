@@ -122,6 +122,10 @@ $world = array(
     "previewstate" => 0,
     "location" => "BRA",
     "anticheatprotection" => false,
+    "externaladdressunprotected" => $config['server']['ip'],
+    "externaladdressprotected" => $config['server']['ip'],
+    "externalportunprotected" => $port,
+    "externalportprotected" => $port,
 );
 
 $data["session"] = $session;
