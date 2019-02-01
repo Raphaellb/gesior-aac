@@ -475,7 +475,7 @@ if($config['site']['send_emails'])
 							<body>
 								<p>Dear '.$config['server']['serverName'].' player,</p>
 								<p>A request for a new password of your ' .$config['server']['serverName']. ' account has been<br />
-								submitted. Please confirm the request at <a href="http://localhost/natan/?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '">http://localhost/natan/?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '</a><br /> 
+								submitted. Please confirm the request at <a href="?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '">?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '</a><br /> 
 								in order to get the password sent to this email address.</p>
 								
 								<p>If clicking on the link does not work in your email program please<br /> 
@@ -484,7 +484,7 @@ if($config['site']['send_emails'])
 								
 								<p>Alternatively, if you should encounter any problems using the above<br />
 								link, please go to<br />
-								<a href="http://localhost/natan/?subtopic=lostaccount&step=confirmation">http://localhost/natan/?subtopic=lostaccount&step=confirmation</a><br />
+								<a href="?subtopic=lostaccount&step=confirmation">?subtopic=lostaccount&step=confirmation</a><br />
 								and confirm the request with your account name and the following<br />
 								confirmation key:<br />
 								' .$newcode. '</p>
@@ -895,7 +895,7 @@ if($config['site']['send_emails'])
 						'.$account->getName().'</p>
 					
 					<p>Please confirm the request at<br />
-					   <a href="http://localhost/natan/?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '">http://localhost/natan/?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '</a><br />
+					   <a href="?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '">?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '</a><br />
 					in order to get the password sent to this email address.</p>
 					
 					<p>If clicking on the link does not work in your email program please<br />
@@ -904,7 +904,7 @@ if($config['site']['send_emails'])
 					
 					<p>Alternatively, if you should encounter any problems using the above<br />
 					link, please go to<br />
-					   <a href="http://localhost/natan/?subtopic=lostaccount&step=confirmation">http://localhost/natan/?subtopic=lostaccount&step=confirmation</a><br />
+					   <a href="?subtopic=lostaccount&step=confirmation">?subtopic=lostaccount&step=confirmation</a><br />
 					and confirm the request with your account name and the following<br />
 					confirmation key:<br />
 						'.$newcode.'</p>
