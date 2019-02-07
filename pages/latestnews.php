@@ -255,9 +255,6 @@ function showPost($topic, $text, $smile)
 				</td>';
         
 			$main_content .= '
-				<td>
-					<img src="'.$layout_name.'/images/global/general/blank.gif" width=10 height=1 border=0 alt=\'\' />
-				</td>
 			</tr>
 		</table><br />';
 		}
