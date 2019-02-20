@@ -7,30 +7,19 @@ Header set X-Content-Type-Options "nosniff"
 Header set X-FRAME-OPTIONS "SAMEORIGIN"
 Header set X-XSS-Protection "1; mode=block"
 Header set Cache-Control "public, max-age=60"
+
 # Security to css and js files
 <FilesMatch "\.(html|htm|js|css|png|jpeg|jpg|gif|pdf|zip)$">
     FileETag None
     <ifModule mod_headers.c>
-        Header set Cache-Control "public, max-age=1000"
-#        Header unset ETag
-#        Header set Cache-Control "max-age=3600, no-cache, no-store, must-revalidate"
-#        Header set Pragma "no-cache"
-#        Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+		Header set Cache-Control "public, max-age=1000"
     </ifModule>
 </FilesMatch>
 
 RewriteEngine on
 Options All -Indexes
 
-ErrorDocument 403 https://127.0.0.1/?subtopic=error
-ErrorDocument 404 https://127.0.0.1/?subtopic=error
-ErrorDocument 500 https://127.0.0.1/?subtopic=error
-
-# WC HTTPS Redirect
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteCond %{HTTPS} !=on
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-#RewriteCond %{HTTP_HOST}%{REQUEST_URI} ^www\.(.*)
-#RewriteRule (.*) http://%1/$1 [R=301,L]
-RewriteCond $1 !^(index\.php|css|js|assets|img|static|uploads|favicon\.ico)
-RewriteRule ^(.*)$ $1 [L]
+#Error Document
+ErrorDocument 403 http://127.0.0.1/?subtopic=error
+ErrorDocument 404 http://127.0.0.1/?subtopic=error
+ErrorDocument 500 http://127.0.0.1/?subtopic=error
