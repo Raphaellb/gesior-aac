@@ -1,9 +1,4 @@
 <?php
-//-----------------------------//
-# Date: 28/11/2017
-# Por: Marco Oliviera
-# Contato: +55 (38) 99186-3004
-//------------------------------//
 if(!defined('INITIALIZED'))
     exit;
 // CONFIG
@@ -91,6 +86,7 @@ if($action == '')
                 <tr bgcolor="'.$config['site']['darkborder'].'">
                     <td width=24%><b>Name</b></td><td width=11%><b>Size</b></td><td width=15%><b>Rent</b></td><td width=30%><b>Status</b></td><td width=20%></td>
                 </tr>';
+		$houses_sql = filter_var($houses_sql, FILTER_SANITIZE_STRING);
                 $houses_sql = $SQL->query('SELECT * FROM houses WHERE town_id = '.$town_id.''.$owner_sql.' ORDER BY '.$order_sql.' DESC')->fetchAll();
                 $counter = 0;
                 foreach($houses_sql as $house)
@@ -264,6 +260,7 @@ if($action == '')
     ##-- Show House --##
     else
     {
+    	$house = filter_var($house, FILTER_SANITIZE_STRING);
         $house = $SQL->query('SELECT * FROM houses WHERE id = '.$id.'')->fetch();
         if($house['doors'] < 2)
             $door = '1 door';
@@ -400,7 +397,8 @@ if($action == '')
                    
         if(Visitor::isLogged())
         {
-            $houseBidded = $SQL->query('SELECT `houses`.`id` house_id, `players`.`id` bidder_id FROM `houses`, `players` WHERE `players`.`id` = `houses`.`highest_bidder` AND `players`.`account_id` = ' . Visitor::getAccount()->getID())->fetch();
+		$houseBidded = filter_var($houseBidded, FILTER_SANITIZE_STRING);
+		$houseBidded = $SQL->query('SELECT `houses`.`id` house_id, `players`.`id` bidder_id FROM `houses`, `players` WHERE `players`.`id` = `houses`.`highest_bidder` AND `players`.`account_id` = ' . Visitor::getAccount()->getID())->fetch();
         }
         if(Visitor::isLogged() && isset($houseBidded['house_id']) && $houseBidded['house_id'] == $house['id'])
         {
@@ -439,6 +437,7 @@ elseif($action == 'bid')
 {
     if(Visitor::isLogged())
     {
+    	$houseOwned = filter_var($houseOwned, FILTER_SANITIZE_STRING);
         $houseOwned = $SQL->query('SELECT `houses`.`id` house_id, `players`.`id` owner_id FROM `houses`, `players` WHERE `players`.`id` = `houses`.`owner` AND `players`.`account_id` = ' . Visitor::getAccount()->getID() . ' LIMIT 1')->fetch();
         if($houseOwned === false)
         {
@@ -451,6 +450,7 @@ elseif($action == 'bid')
                     {
                         if($house->getBidEnd() == 0 || $house->getBidEnd() > time())
                         {
+			    $houseBidded = filter_var($houseBidded, FILTER_SANITIZE_STRING);
                             $houseBidded = $SQL->query('SELECT `houses`.`id` house_id, `players`.`id` bidder_id FROM `houses`, `players` WHERE `players`.`id` = `houses`.`highest_bidder` AND `players`.`account_id` = ' . Visitor::getAccount()->getID())->fetch();
                             if($houseBidded === false || $houseBidded['house_id'] == $house->getID())
                             {

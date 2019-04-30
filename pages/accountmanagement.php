@@ -995,7 +995,7 @@ else {
 						<div class="BoxFrameVerticalLeft" style="background-image:url(' . $layout_name . '/images/global/content/box-frame-vertical.gif);" /></div>
 						<div class="BoxFrameVerticalRight" style="background-image:url(' . $layout_name . '/images/global/content/box-frame-vertical.gif);" /></div>
 						<table style="width:100%;" >
-							<td style="width:100%;text-align:center;" ><nobr>[<a href="#General+Information" >General Information</a>]</nobr> <nobr>[<a href="#Loyalty+Highscore+Character" >Loyalty Highscore Character</a>]</nobr> <nobr>[<a href="#Donates" >Donates</a>]</nobr> ' . ((count($getProdutsCat) >= 1) ? '<nobr>[<a href="#Products+Available" >Products Available</a>]</nobr>' : '') . ' <nobr>[<a href="#Products+Ready+To+Use" >Products Ready To Use</a>]</nobr> <nobr>[<a href="#History" >History</a>]</nobr> <nobr>[<a href="#Registration" >Registration</a>]</nobr></td>
+							<td style="width:100%;text-align:center;" ><nobr>[<a href="#General+Information" >General Information</a>]</nobr> <nobr>[<a href="#Loyalty+Highscore+Character" >Loyalty Highscore Character</a>]</nobr> <nobr>[<a href="#Donates" >Donates</a>]</nobr> ' . ((count($getProdutsCat) >= 1) ? '<nobr>[<a href="#Products+Available" >Products Available</a>]</nobr>' : '') . ' <nobr>[<a href="#Products+Ready+To+Use" >Products Ready To Use</a>]</nobr><nobr>[<a href="#Registration" >Registration</a>]</nobr></td>
 							<td>
 								<table border="0" cellspacing="0" cellpadding="0" >
 									<form action="?subtopic=accountmanagement" method="post" >
@@ -1586,7 +1586,8 @@ else {
 				</td>
 			</tr>
 			<br/>';
-        #history of products bought
+ /*
+ #history of products bought
         $main_content .= '
 				<a name="History" ></a>
 				<div class="TopButtonContainer" >
@@ -1615,7 +1616,8 @@ else {
 							<td>
 								<div class="InnerTableContainer" >
 									<table style="width:100%;" >';
-        $main_content .= '
+ 
+		$main_content .= '
 										<tr>
 											<td>
 												<div class="TableShadowContainerRightTop" >
@@ -1695,6 +1697,7 @@ else {
 					</td>
 				</tr>
 				<br/>';
+*/
         //Real life data
         $main_content .= '
 			<a name="Registration" ></a>
@@ -3875,7 +3878,7 @@ else {
 				</div>
 				<center>
 					<table border="0" cellspacing="0" cellpadding="0" >
-						<form action="https://secure.tibia.com/account/?subtopic=accountmanagement" method="post" >
+						<form action="?subtopic=accountmanagement" method="post" >
 							<tr>
 								<td style="border:0px;" ><div class="BigButton" style="background-image:url(' . $layout_name . '/images/global/buttons/sbutton.gif)" >
 										<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" >
@@ -3938,7 +3941,7 @@ else {
     if ($action == "paymentshistory") {
 
         $account_name = $account_logged->getName();
-        $get_payments = $SQL->query("SELECT * FROM `z_shop_donates` WHERE `account_name` = '$account_name' ORDER BY `date` DESC")->fetchAll();
+        $get_payments = $SQL->query("SELECT * FROM `pagseguro_transactions` WHERE `account_name` = '$account_name' ORDER BY `date` DESC")->fetchAll();
 
         $main_content .= '
 			<div class="TableContainer" >
@@ -4176,6 +4179,7 @@ else {
 						</TABLE>';
                 }
             } else {
+				$getOrder = filter_var($getOrder, FILTER_SANITIZE_STRING);
                 $getOrder = $SQL->query("SELECT * FROM `z_shop_offer` WHERE `id` = '" . $transConfirm['service_id'] . "'")->fetch();
                 $main_content .= '
 							<form method="post" action="?subtopic=accountmanagement&action=confirmtransfer">
@@ -4294,7 +4298,7 @@ else {
 														<div class="TableContentContainer" >
 															<table class="TableContent" width="100%"  style="border:1px solid #faf0d7;">
 																<tr bgcolor="' . $config['site']['darkborder'] . '">';
-        $getHistoryDonate = $SQL->query("SELECT * FROM `z_shop_donates` WHERE `account_name` = '" . $account_logged->getName() . "' ORDER BY `date` DESC")->fetchAll();
+        $getHistoryDonate = $SQL->query("SELECT * FROM `pagseguro_transactions` WHERE `name` = '" . $account_logged->getName() . "' ORDER BY `data` DESC")->fetchAll();
         $main_content .= '
 																	<td class="LabelV">Date</td>
 																	<td class="LabelV">Service</td>
@@ -4308,15 +4312,16 @@ else {
             $n = 0;
             foreach ($getHistoryDonate as $doHistory) {
                 $bgcolor = (($n++ % 2 == 1) ? $config['site']['darkborder'] : $config['site']['lightborder']);
-                $main_content .= '
+				$main_content .= '
 																<tr bgcolor="' . $bgcolor . '">
-																	<td>' . date("M d Y", $doHistory['date']) . '</td>
+																	<td>' . $doHistory['data'] . '</td>
 																	<td>' . $doHistory['coins'] . ' Tibia Coins</td>
 																	<td>' . $doHistory['price'] . ' BRL</td>
-																	<td>' . $doHistory['method'] . '</td>';
+																	<td>' . $doHistory['payment_method'] . '</td>';
                 $bankref = explode("-", $doHistory['reference']);
                 $bankName = $bankref[1];
-                $main_content .= '<td>' . $bankName . '</td>';
+                //$main_content .= '<td>' . $bankName . '</td>';
+				$main_content .= '<td>PAGSEGURO</td>';
                 $main_content .= '
 																	<td>' . $doHistory['status'] . '</td>
 																	<td>' . (($doHistory['status'] == "confirm") ? '[<a href="?subtopic=accountmanagement&action=confirmdonate&id=' . $doHistory['id'] . '">Confirm</a>]' : '') . '</td>
@@ -4364,6 +4369,7 @@ else {
 
     if ($action == "confirmdonate") {
         $donateID = (int)$_REQUEST['id'];
+		$getDonate = filter_var($getDonate, FILTER_SANITIZE_STRING);
         $getDonate = $SQL->query("SELECT * FROM `z_shop_donates` WHERE `id` = '$donateID'")->fetchAll();
 
         if (count($getDonate[0]) == 0) {
@@ -4485,8 +4491,10 @@ else {
                             // Refresh! Não faz nada ou re-exibe o formulário preenchido
                         } else {
                             $_SESSION['hash'] = $request;
+							$update_donate_status = filter_var($update_donate_status, FILTER_SANITIZE_STRING);
                             $update_donate_status = $SQL->query("UPDATE `z_shop_donates` SET `status` = 'confirmed' WHERE `id` = '$donateID' AND `account_name` = '$donateAccount'");
-                            $add_confirmation = $SQL->query("INSERT INTO `z_shop_donate_confirm` (`date`,`account_name`,`donate_id`,`msg`) VALUES ('$donateDate','$donateAccount','$donateID','$confirmText')");
+							$add_confirmation = filter_var($add_confirmation, FILTER_SANITIZE_STRING);
+							$add_confirmation = $SQL->query("INSERT INTO `z_shop_donate_confirm` (`date`,`account_name`,`donate_id`,`msg`) VALUES ('$donateDate','$donateAccount','$donateID','$confirmText')");
                         }
                     }
                     $main_content .= '

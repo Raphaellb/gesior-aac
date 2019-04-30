@@ -91,10 +91,10 @@ if(isset($_REQUEST['step']) && $_REQUEST['step'] == "downloadagreement") {
 																			</tr>
 																			<tr>
 																			<td valign="top">
-																					<a href="" target="_blank" type="application/octet-stream" target="_top">Download Tibia 11.50<br/>Windows Client</a>
+																					<a href="" target="_blank" type="application/octet-stream" target="_top">Download Tibia 12<br/>Windows Client</a>
 																				</td>
 																				<td valign="top">
-																					<a href="" target="_blank" type="application/octet-stream" target="_top">Download Tibia 10.00<br/>Windows Client</a>
+																					<a href="" target="_blank" type="application/octet-stream" target="_top">Download Tibia 10<br/>Windows Client</a>
 																				</td>
 																			</tr>
 																			<tr>

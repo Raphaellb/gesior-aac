@@ -73,6 +73,14 @@ $sections_desc = array(
 					5 => 'Report bugs on website and in-game here.', 
 					6 => 'This board is all about events. Here you can advertise your events server-wide to find more participants or exchange ideas on how to organise events best.', 
 					7 => 'Everything about your private interests which has nothing to do with Tibia.');
+$sections_img = array(
+					1 => '<img src="'.$layout_name.'/images/forum/boards/1.png">', 
+					2 => '<img src="'.$layout_name.'/images/forum/boards/2.png">', 
+					3 => '<img src="'.$layout_name.'/images/forum/boards/3.png">', 
+					4 => '<img src="'.$layout_name.'/images/forum/boards/4.png">', 
+					5 => '<img src="'.$layout_name.'/images/forum/boards/5.png">', 
+					6 => '<img src="'.$layout_name.'/images/forum/boards/6.png">', 
+					7 => '<img src="'.$layout_name.'/images/forum/boards/7.png">');
 // END
 # Check if player can post
 function canPost($account)
@@ -81,6 +89,7 @@ function canPost($account)
     {
         $SQL = $GLOBALS['SQL'];
         $level_limit = $GLOBALS['level_limit'];
+	$player = filter_var($player, FILTER_SANITIZE_STRING);	
         $player = $SQL->query("SELECT " . $SQL->fieldName('level') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->fieldName('account_id') . " = ".$SQL->quote($account->getId())." ORDER BY " . $SQL->fieldName('level') . " DESC")->fetch();
         if($player['level'] >= $level_limit)
             return true;
@@ -246,39 +255,83 @@ if($action == '')
 {
 	if(!$logged)
     $main_content .=  '
-		<td  class="ff_std" align="left" >You are <b>not</b> logged in. <a href="?subtopic=accountmanagement" >Log in</a> to post on the forum.</td>';
-		$main_content .= '
-			<td  class="ff_info" align="right" valign="bottom" >&nbsp;<br>Current Time: <i>'.date('G:i').' CEST</i></td>
+	<table border=0 cellpadding=2 cellspacing=0 width=100% style="width: 99%; border-radius:5px; border:1px dashed #b71313; background-color:#fcbebe; padding:2px">
+		<tr>
+			<td  class="ff_std" align="left" >You are <b>not</b> logged in. <a href="?subtopic=accountmanagement" >Log in</a> to post on the forum.</td>
 		</tr>
 	</table>';
+		$main_content .= '
+	</br>
+	<table border="0" cellpadding="2" cellspacing="0" width="100%">
+		<tr>
+			<td  class="ff_info" align="right" valign="bottom"&nbsp;<br>Current Time: <i>'.date('G:i').' CEST</i></td>
+		</tr>
+	</table>
+	</br>';
 		
     $main_content .= '
-		<table border=0 cellpadding=3 cellspacing=1 width=100%>
-			<tr>
-				<td  bgcolor="#505050" class="ff_white" colspan=1 align="center" width=32 height="16" ><b><img src="'.$layout_name.'/images/global/general/blank.gif" width=32 height=16 border=0></b></td>
-				<td  bgcolor="#505050" class="ff_white" colspan=1 ><b>Board</b></td>
-				<td  bgcolor="#505050" class="ff_white" colspan=1 align="center" ><b>Posts</b></td>
-				<td  bgcolor="#505050" class="ff_white" colspan=1 align="center" ><b>Threads</b></td>
-				<td  bgcolor="#505050" class="ff_white" colspan=1 align="center" ><b>Last Post</b></td>
-			</tr>';
+<div class="TableContainer">
+    <div class="CaptionContainer">
+        <div class="CaptionInnerContainer">
+            <span class="CaptionEdgeLeftTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span>
+            <span class="CaptionEdgeRightTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span>
+            <span class="CaptionBorderTop" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span>
+            <span class="CaptionBorderBottom" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span>
+            <span class="CaptionEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span>
+            <span class="CaptionVerticalLeft" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span>
+            <div class="Text" style="min-height: 17px">
+                <div style="float: left">Fórum</div>
+            </div>
+            <span class="CaptionVerticalRight" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span>
+            <span class="CaptionBorderBottom" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span>
+            <span class="CaptionEdgeLeftBottom"></span>
+            <span class="CaptionEdgeRightBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span>
+        </div>
+    </div>
+
+    <table class="Table3" cellpadding="0" cellspacing="0" align="">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="InnerTableContainer">
+                        <table style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="TableShadowContainerRightTop">
+                                            <div class="TableShadowRightTop" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rt.gif);"></div>
+                                        </div>
+                                        <div class="TableContentAndRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rm.gif);">
+                                            <div class="TableContentContainer">
+                                                <table class="TableContent " width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan=1 align="center" width="32" height="16"></td>
+                                                            <td colspan=1><b>Board</b></td>
+                                                            <td colspan=1 align="center"><b>Posts</b></td>
+                                                            <td colspan=1 align="center"><b>Threads</b></td>
+                                                            <td colspan=1 align="center"><b>Last Post</b></td>
+                                                        </tr>';
 			
+    $info = filter_var($info, FILTER_SANITIZE_STRING);	
     $info = $SQL->query("SELECT " . $SQL->fieldName('section') . ", COUNT(" . $SQL->fieldName('id') . ") AS 'threads', SUM(" . $SQL->fieldName('replies') . ") AS 'replies' FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->fieldName('first_post') . " = " . $SQL->fieldName('id') . " GROUP BY " . $SQL->fieldName('section') . "")->fetchAll();
     foreach($info as $data)
         $counters[$data['section']] = array('threads' => $data['threads'], 'posts' => $data['replies'] + $data['threads']);
     foreach($sections as $id => $section)
     {
+    	$last_post = filter_var($last_post, FILTER_SANITIZE_STRING);
         $last_post = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " = ".(int) $id." AND " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " ORDER BY " . $SQL->fieldName('post_date') . " DESC LIMIT 1")->fetch();
         if(!is_int($number_of_rows / 2)) { $bgcolor = $config['site']['darkborder']; } else { $bgcolor = $config['site']['lightborder']; } $number_of_rows++;
 		
         $main_content .= '
 			<tr bgcolor="'.$bgcolor.'">
-				<td  bgcolor="#D4C0A1" class="ff_std" >&nbsp;</td>
-				<td bgcolor="#D4C0A1" class="ff_std"><a href="?subtopic=forum&action=show_board&id='.$id.'">'.$section.'</a><br /><small>'.$sections_desc[$id].'</small></td>
-				<td bgcolor="#F1E0C6" class="ff_std" colspan=1 align="center">'.(int) $counters[$id]['posts'].'</td>
-				<td bgcolor="#D4C0A1" class="ff_std" colspan=1 align="center">'.(int) $counters[$id]['threads'].'</td>
-				<td bgcolor="#F1E0C6" class="ff_std" align="left" NOWRAP>';
+				<td class="ff_std" >'.$sections_img[$id].'</td>
+				<td class="ff_std"><a href="?subtopic=forum&action=show_board&id='.$id.'">'.$section.'</a><br /><small>'.$sections_desc[$id].'</small></td>
+				<td class="ff_std" colspan=1 align="center">'.(int) $counters[$id]['posts'].'</td>
+				<td class="ff_std" colspan=1 align="center">'.(int) $counters[$id]['threads'].'</td>
+				<td class="ff_std" align="left" NOWRAP>';
         if(isset($last_post['name']))
-            $main_content .= '<a href="?subtopic=forum&action=show_board&id='.$id.'"><img src="images/forum/logo_lastpost.gif" border=0 width=10 height=9></a>'.date('d.m.y H:i:s', $last_post['post_date']).'<br>
+            $main_content .= '<a href="?subtopic=forum&action=show_board&id='.$id.'"><img src="images/forum/logo_lastpost.gif" border=0 width=10 height=9></a>'.date('d/m/y H:i:s', $last_post['post_date']).'<br>
 			<font class="ff_info">by&nbsp;<a href="?subtopic=characters&name='.urlencode($last_post['name']).'">'.$last_post['name'].'</a></font>';
         else
             $main_content .= 'No posts';
@@ -289,21 +342,35 @@ if($action == '')
 
     }
     $main_content .= '
-			<tr>
-				<table border=0 cellpadding=6 cellspacing=0 width=100%>
-					<tr>
-						<td  bgcolor="#505050" class="ff_white" colspan=1 align="left" NOWRAP ><b>All times are CEST.</b></td>
-						<td  bgcolor="#505050" class="ff_white" colspan=1 align="right" NOWRAP >&nbsp;</td>
-					</tr>
-				</td>
-			</tr>
-		</table>';
+                                                    <tr>
+                                                        <td colspan=5 align="left"><b>All times are CEST.</b></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="TableShadowContainer">
+                                        <div class="TableBottomShadow" style="background-image:url(./layouts/tibiacom/images/global/content/table-shadow-bm.gif);">
+                                            <div class="TableBottomLeftShadow" style="background-image:url(./layouts/tibiacom/images/global/content/table-shadow-bl.gif);"></div>
+                                            <div class="TableBottomRightShadow" style="background-image:url(./layouts/tibiacom/images/global/content/table-shadow-br.gif);"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>';
 }
 
 if($action == 'show_board')
 {
     $section_id = (int) $_REQUEST['id'];
     $page = (int) $_REQUEST['page'];
+    $threads_count = filter_var($threads_count, FILTER_SANITIZE_STRING);
     $threads_count = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS threads_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " = ".(int) $section_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . "")->fetch();
     for($i = 0; $i < $threads_count['threads_count'] / $threads_per_page; $i++)
     {
@@ -337,6 +404,7 @@ if($action == 'show_board')
 		</tr>
 	</table>';
 	
+    $last_threads = filter_var($last_threads, FILTER_SANITIZE_STRING);
     $last_threads = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('signature') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('last_post') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('replies') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('views') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('icon_id') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " = ".(int) $section_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " ORDER BY " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('last_post') . " DESC LIMIT ".$threads_per_page." OFFSET ".($page * $threads_per_page))->fetchAll();
 	
     if(isset($last_threads[0]))
@@ -409,14 +477,15 @@ if($action == 'show_board')
 				
             if($thread['last_post'] > 0)
             {
+	    	$last_post = filter_var($last_post, FILTER_SANITIZE_STRING);
                 $last_post = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread['id']." AND " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " ORDER BY " . $SQL->fieldName('post_date') . " DESC LIMIT 1")->fetch();
                 if(isset($last_post['name']))
-                    $main_content .= date('d.m.y H:i:s', $last_post['post_date']).'<br />by <a href="?subtopic=characters&name='.urlencode($last_post['name']).'">'.$last_post['name'].'</a>';
+                    $main_content .= date('d/m/y H:i:s', $last_post['post_date']).'<br />by <a href="?subtopic=characters&name='.urlencode($last_post['name']).'">'.$last_post['name'].'</a>';
                 else
                     $main_content .= 'No posts.';
             }
             else
-                $main_content .= date('d.m.y H:i:s', $thread['post_date']).'<br />by <a href="?subtopic=characters&name='.urlencode($thread['name']).'">'.$thread['name'].'</a>';
+                $main_content .= date('d/m/y H:i:s', $thread['post_date']).'<br />by <a href="?subtopic=characters&name='.urlencode($thread['name']).'">'.$thread['name'].'</a>';
             $main_content .= '
 				</td>
 			</tr>';
@@ -474,9 +543,11 @@ if($action == 'show_thread')
 {
     $thread_id = (int) $_REQUEST['id'];
     $page = (int) $_REQUEST['page'];
+    $thread_name = filter_var($thread_name, FILTER_SANITIZE_STRING);
     $thread_name = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " AND " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " LIMIT 1")->fetch();
     if(!empty($thread_name['name']))
     {
+	$posts_count = filter_var($posts_count, FILTER_SANITIZE_STRING);
         $posts_count = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS posts_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id)->fetch();
         for($i = 0; $i < $posts_count['posts_count'] / $threads_per_page; $i++)
         {
@@ -627,7 +698,7 @@ if($action == 'show_thread')
                     $main_content .= '
 						<font class="ff_smallinfo">'.htmlspecialchars($rank->getName()).' of the <a href="?subtopic=guilds&action=show&guild='.$guild->getId().'" >'.htmlspecialchars($guild->getName()).'</a> (Larissa)</font><br>';
             }
-			
+	    $posts = filter_var($posts, FILTER_SANITIZE_STRING);
             $posts = $SQL->query("SELECT COUNT(" . $SQL->fieldName('id') . ") AS 'posts' FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->fieldName('author_aid') . "=".(int) $thread['account_id'])->fetch();
 			
             $main_content .= '
@@ -651,7 +722,7 @@ if($action == 'show_thread')
 				</div>				
 				<div class="PostLower" >
 					<div class="PostDetailsHelper" >
-						<div class="PostDetails" ><img src="'.$layout_name.'/images/global/forum/logo_oldpost.gif" border=0 width=14 height=11>'.date('d.m.y H:i:s', $thread['post_date']);
+						<div class="PostDetails" ><img src="'.$layout_name.'/images/global/forum/logo_oldpost.gif" border=0 width=14 height=11>'.date('d/m/y H:i:s', $thread['post_date']);
 			
             if($thread['edit_date'] > 0)
             {
@@ -659,7 +730,7 @@ if($action == 'show_thread')
                     $main_content .= '<br />Edited by moderator';
                 else
                     $main_content .= '<br />Edited by '.htmlspecialchars($thread['name']);
-                $main_content .= '<br />on '.date('d.m.y H:i:s', $thread['edit_date']);
+                $main_content .= '<br />on '.date('d/m/y H:i:s', $thread['edit_date']);
             }
             $main_content .= '</div></div>';
 			
@@ -744,6 +815,7 @@ if($action == 'remove_post')
     if($logged && $group_id_of_acc_logged >= $group_not_blocked)
     {
         $id = (int) $_REQUEST['id'];
+	$post = filter_var($post, FILTER_SANITIZE_STRING);
         $post = $SQL->query("SELECT " . $SQL->fieldName('id') . ", " . $SQL->fieldName('first_post') . ", " . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->fieldName('id') . " = ".$id." LIMIT 1")->fetch();
         if($post['id'] == $id)
         {
@@ -754,6 +826,7 @@ if($action == 'remove_post')
             }
             else
             {
+		$post_page = filter_var($post_page, FILTER_SANITIZE_STRING);
                 $post_page = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS posts_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " < ".$id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $post['first_post'])->fetch();
                 $page = (int) ceil($post_page['posts_count'] / $threads_per_page) - 1;
 				$SQL->query("UPDATE " . $SQL->tableName('z_forum') . " SET " . $SQL->fieldName('replies') . " = " . $SQL->fieldName('replies') . " - 1 WHERE " . $SQL->fieldName('id') . " = ".$post['first_post']);
@@ -773,8 +846,10 @@ if($action == 'new_post')
     {
         if(canPost($account_logged) || $group_id_of_acc_logged >= $group_not_blocked)
         {
+	    $players_from_account = filter_var($players_from_account, FILTER_SANITIZE_STRING);
             $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
             $thread_id = (int) $_REQUEST['thread_id'];
+	    $thread = filter_var($thread, FILTER_SANITIZE_STRING);
             $thread = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('icon_id') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $thread_id." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id." LIMIT 1")->fetch();
 			
 			$main_content .= '
@@ -819,9 +894,10 @@ if($action == 'new_post')
                 $saved = false;
                 if(isset($_REQUEST['quote']))
                 {
+		    $quoted_post = filter_var($quoted_post, FILTER_SANITIZE_STRING);
                     $quoted_post = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $quote)->fetchAll();
                     if(isset($quoted_post[0]['name']))
-                        $text = '[i]Originally posted by '.$quoted_post[0]['name'].' on '.date('d.m.y H:i:s', $quoted_post[0]['post_date']).':[/i][quote]'.$quoted_post[0]['post_text'].'[/quote]';
+                        $text = '[i]Originally posted by '.$quoted_post[0]['name'].' on '.date('d/m/y H:i:s', $quoted_post[0]['post_date']).':[/i][quote]'.$quoted_post[0]['post_text'].'[/quote]';
                 }
                 if(isset($_POST['save_post']) && $_POST['save'] == "save")
                 {
@@ -892,6 +968,7 @@ if($action == 'new_post')
 						
                         $SQL->query("UPDATE " . $SQL->tableName('z_forum') . " SET " . $SQL->fieldName('replies') . "=" . $SQL->fieldName('replies') . "+1, " . $SQL->fieldName('last_post') . "=".time()." WHERE " . $SQL->fieldName('id') . " = ".(int) $thread_id);
 						
+			$post_page = filter_var($post_page, FILTER_SANITIZE_STRING);
                         $post_page = $SQL->query("SELECT COUNT(" . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ") AS posts_count FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . " <= ".time()." AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread['id'])->fetch();
 						
                         $page = (int) ceil($post_page['posts_count'] / $threads_per_page) - 1;
@@ -1051,6 +1128,7 @@ if($action == 'new_post')
 						</td>
 				</FORM>
 			</table>';
+	 	    $threads = filter_var($threads, FILTER_SANITIZE_STRING);
                     $threads = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_smile') . " FROM " . $SQL->tableName('players') . ", " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " = " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . " AND " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . " = ".(int) $thread_id." ORDER BY " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . " DESC LIMIT 10")->fetchAll();
 						
                     $main_content .= '
@@ -1089,9 +1167,11 @@ if($action == 'edit_post')
         if(canPost($account_logged) || $group_id_of_acc_logged >= $group_not_blocked)
         {
             $post_id = (int) $_REQUEST['id'];
+	    $thread = filter_var($thread, FILTER_SANITIZE_STRING);
             $thread = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_aid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_date') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_smile') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $post_id." LIMIT 1")->fetch();
             if(isset($thread['id']))
             {
+		$first_post = filter_var($first_post, FILTER_SANITIZE_STRING);
                 $first_post = $SQL->query("SELECT " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_guid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('author_aid') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('first_post') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_topic') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_text') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('post_smile') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . ", " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('section') . " FROM " . $SQL->tableName('z_forum') . " WHERE " . $SQL->tableName('z_forum') . "." . $SQL->fieldName('id') . " = ".(int) $thread['first_post']." LIMIT 1")->fetch();
 				
 				$main_content .= '
@@ -1102,7 +1182,7 @@ if($action == 'edit_post')
 							<a href="?subtopic=forum" >Community Boards</a> | 
 							<a href="?subtopic=forum&action=show_board&id='.$thread['section'].'">'.$sections[$thread['section']].'</a> | 
 							<a href="?subtopic=forum&action=show_thread&id='.$thread['first_post'].'">'.htmlspecialchars($first_post['post_topic']).'</a> | 
-							<b><a href="http://forum.tibia.com/forum/?action=thread&amp;postid=35335511#post35335511" >Post</a></b> | 
+							<b><a href="?subtopic=forum" >Post</a></b> | 
 							<b>Edit Post</b></TD>
 						<TD><IMG SRC="'.$layout_name.'/images/global/general/blank.gif" WIDTH=10 HEIGHT=1 BORDER=0></TD>
 					</TR>
@@ -1128,6 +1208,7 @@ if($action == 'edit_post')
 					
                 if($account_logged->getId() == $thread['author_aid'] || $group_id_of_acc_logged >= $group_not_blocked)
                 {
+		    $players_from_account = filter_var($players_from_account, FILTER_SANITIZE_STRING);
                     $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
                     $saved = false;
                     if(isset($_POST['edit_post']) && $_POST['save'] == "save")
@@ -1356,6 +1437,7 @@ if($action == 'new_topic')
     {
         if(canPost($account_logged) || $group_id_of_acc_logged >= $group_not_blocked)
         {
+	    $players_from_account = filter_var($players_from_account, FILTER_SANITIZE_STRING);
             $players_from_account = $SQL->query("SELECT " . $SQL->tableName('players') . "." . $SQL->fieldName('name') . ", " . $SQL->tableName('players') . "." . $SQL->fieldName('id') . " FROM " . $SQL->tableName('players') . " WHERE " . $SQL->tableName('players') . "." . $SQL->fieldName('account_id') . " = ".(int) $account_logged->getId())->fetchAll();
 			
             $section_id = (int) $_REQUEST['section_id'];
@@ -1445,6 +1527,7 @@ if($action == 'new_topic')
 							$account_logged->set('last_post', time());
 							$account_logged->save();
 							
+							$insert_topic = filter_var($insert_topic, FILTER_SANITIZE_STRING);
 							$insert_topic = $SQL->query("INSERT INTO " . $SQL->tableName('z_forum') . " (
 													" . $SQL->fieldName('first_post') . " ,
 													" . $SQL->fieldName('last_post') . " ,

@@ -10,7 +10,7 @@ if(!defined('INITIALIZED'))
     <meta name="author" content="Marco Oliveira">
     <meta http-equiv="content-language" content="pt-br">
     <meta name="keywords" content="free online game, free multiplayer game, free online rpg, free mmorpg, mmorpg, mmog, online role playing game, online multiplayer game, internet game, online rpg, rpg">
-	<meta name="description" content="Tibia is a free massively multiplayer online role-playing game (MMORPG). Join this fascinating game that has thousands of fans from all over the world! - http://www.tibia.com" />
+	<meta name="description" content="Tibia is a free massively multiplayer online role-playing game (MMORPG). Join this fascinating game that has thousands of fans from all over the world! - https://127.0.0.1" />
 	
     <!--  regular browsers -->
     <link rel="shortcut icon" href="<?php echo $layout_name; ?>/images/global/general/favicon.ico" type="image/x-icon">
@@ -31,22 +31,22 @@ if(!defined('INITIALIZED'))
     <!-- Fallback for older devices: -->
     <link rel="apple-touch-icon-precomposed" href="<?php echo $layout_name; ?>/images/global/general/apple-touch-icon-precomposed.png">
 
-    <link href="<?php echo $layout_name; ?>/basic_d.css" rel="stylesheet" type="text/css">
+    <link href="<?php echo $layout_name; ?>/css/style.css" rel="stylesheet" type="text/css">
     <?php
     if($_REQUEST['subtopic'] == "latestnews" || $_REQUEST['subtopic'] == "newsarchive")
-        echo '<link href="'.$layout_name.'/news.css" rel="stylesheet" type="text/css">';
+        echo '<link href="'.$layout_name.'/css/news.css" rel="stylesheet" type="text/css">';
     ?>
-    <script src="<?php echo $layout_name; ?>/jquery.js" ></script>
-    <script src="<?php echo $layout_name; ?>/jquery-ui.core.js" ></script>
-    <script src="<?php echo $layout_name; ?>/jquery-ui.widgets.js" ></script>
-    <script src="<?php echo $layout_name; ?>/jquery.mask.js"></script>
-    <script src="<?php echo $layout_name; ?>/ajaxcip.js"></script>
-    <script src="<?php echo $layout_name; ?>/ajaxmonteiro.js"></script>
+    <script src="<?php echo $layout_name; ?>/js/jquery/jquery.js" ></script>
+    <script src="<?php echo $layout_name; ?>/js/jquery/jquery-ui.core.js" ></script>
+    <script src="<?php echo $layout_name; ?>/js/jquery/jquery-ui.widgets.js" ></script>
+    <script src="<?php echo $layout_name; ?>/js/jquery/jquery.mask.js"></script>
+    <script src="<?php echo $layout_name; ?>/js/ajaxcip.js"></script>
+    <script src="<?php echo $layout_name; ?>/js/ajaxmonteiro.js"></script>
     <?php
     if($_REQUEST['subtopic'] == "createaccount")
-        echo '<script src="'.$layout_name.'/create_character.js"></script>';
+        echo '<script src="'.$layout_name.'/js/create_character.js"></script>';
     ?>
-    <script src="<?php echo $layout_name; ?>/generic.js"></script>
+    <script src="<?php echo $layout_name; ?>/js/generic.js"></script>
     <script>
         var loginStatus=0;
         loginStatus='<?php if($logged){ ?>true<?php } else { ?>false<?php } ?>';
@@ -69,8 +69,8 @@ if(!defined('INITIALIZED'))
             g_FlashClientInPopUp = false;
         }
     </script>
-    <script src="<?php echo $layout_name; ?>/initialize.js"></script>
-    <script src="<?php echo $layout_name; ?>/swfobject.js" ></script>
+    <script src="<?php echo $layout_name; ?>/js/initialize.js"></script>
+    <script src="<?php echo $layout_name; ?>/js/swfobject.js" ></script>
     <?php if($_REQUEST['subtopic'] == "accountmanagement") { ?>
         <script type="text/javascript">
             function openGameWindow(a_URL)
@@ -100,6 +100,9 @@ if(!defined('INITIALIZED'))
       onunload="SaveMenu();"
       onload="SetFormFocus()"
       data-twttr-rendered="true">
+	  
+<?php include_once('./pages/promo.php');?>  
+
 <div id="DeactivationContainer" onclick="DisableDeactivationContainer();"></div>
 
 <div id="MainHelper1">
@@ -502,21 +505,8 @@ if(!defined('INITIALIZED'))
                     </div>
                     <script>InitializePage();</script>
                 </div>
-          				
-						
-<?php
-	$casts = $SQL->query("SELECT COUNT(*) AS 'cast' FROM `live_casts`")->fetch();
-	$cast = $casts["cast"];
-	$specs = $SQL->query("SELECT SUM(`spectators`) AS 'spec' FROM `live_casts`")->fetch();
-	$spec = $specs["spec"];
-	if($spec === nil)
-		$spec = 0;
-?>
-
-
 <div id="ContentColumn">
 <div id="Content" class="Content">
-
 <div id="ContentHelper">
 <div id="" class="Box">
 <div class="Corner-tl" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-tl.gif);"></div>
@@ -525,41 +515,11 @@ if(!defined('INITIALIZED'))
 <div class="BorderTitleText" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/newsheadline_background.gif); height: 28px;">
 <div class="InfoBar">
 &nbsp;
-<a class="InfoBarBlock" style="text-decoration:none" href="#">
-<img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/icon-cast.png">
-<span class="InfoBarNumbers"><img class="InfoBarSmallElement" src="<?php echo $layout_name; ?>/images/global/header/info/icon-streamers.png">
-<?php
-					if(count($casts) > 0) {
-			?>	
-
-<span class="InfoBarSmallElement">No cast's on.</span>
-
-
-<?php
-					} else {
-			?>	
-<span class="InfoBarSmallElement"><?PHP echo $cast;?> online</span>
-<img class="InfoBarSmallElement" src="<?php echo $layout_name; ?>/images/global/header/info/icon-viewers.png">
-<span class="InfoBarSmallElement"><?PHP echo $spec;?> spectators</span>
-			
-			<?php
-					}
-			?>	
+<a href="#" target="_blank" style="text-decoration:none" onclick="document.getElementById('pop').style.display='block';">
+	<img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/discordapp.png">
+	<span class="InfoBarNumbers">
+	<span class="InfoBarSmallElement">Discord</span>
 </span>
-</a>
-		
-		
-
- 
-<a href="#" style="text-decoration:none" onclick="document.getElementById('pop').style.display='block';">
-							 
-
-<img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/discordapp.png">
-<span class="InfoBarNumbers">
-<img class="InfoBarSmallElement" src="<?php echo $layout_name; ?>/images/global/header/info/icon-streamers.png">
-<span class="InfoBarSmallElement">Discord</span>
-</span>
-
 </a>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <a style="text-decoration:none" href="?subtopic=downloadclient&step=downloadagreement">
@@ -592,11 +552,8 @@ if(!defined('INITIALIZED'))
 <div class="CornerWrapper-b"><div class="Corner-br" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-br.gif);">
 </div>
 </div>
-</div>
-						
-						
-						
-                            <script type="text/javascript" src="<?php echo $layout_name; ?>/newsticker.js"></script>
+</div>			
+                            <script type="text/javascript" src="<?php echo $layout_name; ?>/js/newsticker.js"></script>
                             <?php echo $news_content; ?>
                             <div id="NewsArchive" class="Box">
                                 <div class="Corner-tl" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-tl.gif);"></div>
@@ -655,44 +612,6 @@ if(!defined('INITIALIZED'))
                    <img id="Monster" src="<?php echo $layout_name; ?>/images/global/header/monsters/dragonlord.gif" alt="Monster of the Week">
                   <img id="Pedestal" src="<?php echo $layout_name; ?>/images/global/header/pedestal.png" alt="Monster Pedestal Box"/>
                 </div>							
-							
-                            <!--<div id="ThemeboxesColumn">
-                                <div id="DeactivationContainerThemebox" onclick="DisableDeactivationContainer();"></div>
-                                <div id="RightArtwork">
-                                    <img id="Monster" src="<?php echo $layout_name; ?>/images/global/header/monsters/dragonlord.gif" alt="Monster of the Week">
-                                    <img id="PedestalAndOnline" src="<?php echo $layout_name; ?>/images/global/header/pedestal-and-online.gif" alt="Monster Pedestal and Players Online Box">
-                                    <?php
-
-                                    if ( ! session_id() ) @ session_start();
-
-                                    $last = null;
-                                    if (!isset($_SESSION)) {
-                                        $_SESSION = [];
-                                    }
-
-                                    if (isset($_SESSION['server_status_last_check'])) {
-                                        $last = $_SESSION['server_status_last_check'];
-                                    }
-                                    if ($last == null || time() > $last + 30) {
-                                        $_SESSION['server_status_last_check'] = time();
-                                        $_SESSION['server_status'] = $config['status']['serverStatus_online'];
-                                    }
-
-
-                                    if($_SESSION['server_status'] == 1){
-                                        $qtd_players_online = $SQL->query("SELECT count(*) as total from `players_online`")->fetch();
-                                        if($qtd_players_online["total"] == "1"){
-                                            $players_online = $qtd_players_online["total"].'<br>Player Online';
-                                        }else{
-                                            $players_online = $qtd_players_online["total"].'<br>Players Online';
-                                        }
-                                    }
-                                    else{
-                                        $players_online = 'Server<br>Offline';
-                                    }
-                                    ?>
-                                    <div id="PlayersOnline" onclick="window.location = '?subtopic=worlds';"><?php echo $players_online; ?></div>
-                                </div>-->
                                 <div id="Themeboxes">
                                     <?php
                                     $skills = $SQL->query('SELECT * FROM players WHERE deleted = 0 AND group_id = 1 AND account_id != 1 ORDER BY level DESC LIMIT 5');
@@ -717,7 +636,7 @@ if(!defined('INITIALIZED'))
                                                 echo '<div class="ribbon-double"></div>';
                                             ?>
                                         </div>
-
+												
                                         <div class="ThemeboxButton">
                                             <form action="?subtopic=accountmanagement&action=services&ServiceCategoryID=2" method="post" style="padding:0px;margin:0px;">
                                                 <div class="BigButton" style="background-image:url(<?php echo $layout_name; ?>/images/global/buttons/sbutton_green.gif)">
@@ -732,25 +651,13 @@ if(!defined('INITIALIZED'))
                                         </div>
                                     </div>
 									
-                                    <!-- Facebook theme box
-                                    <div id="NetworksBox" class="Themebox" style="background-image:url(<?php echo $layout_name; ?>/images/global/themeboxes/networks/networksbox.png);">
-                                        <div id="FacebookBlock" >
-                                            <a id="FacebookPageLink" target="_blank" href="<?php echo $config['social']['facebook']; ?>" >
-                                                <img src="<?php echo $layout_name; ?>/images/global/themeboxes/networks/tibia-facebook-page-logo.png" /></a>
-                                            <div id="FacebookLikeButton" >
-                                                <div class="fb-like" data-href="<?php echo $config['social']['facebook']; ?>" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
-                                            </div>
-                                            <div id="FacebookShareButton" >
-                                                <div class="fb-share-button" data-href="<?php echo $config['social']['facebook']; ?>" data-layout="button"></div>
-                                            </div>
-                                            <div id="FacebookLikes" >
-                                                <div class="fb-like" data-href="<?php echo $config['social']['facebook']; ?>" data-width="250" data-layout="standard" data-action="recommend" data-show-faces="false" ></div>
-                                            </div>
-                                        </div>
-                                        <div class="Bottom" style="background-image:url(<?php echo $layout_name; ?>/images/global/general/box-bottom.gif);">
-                                        </div> -->
-
-                                        <!-- current poll theme box -->
+									<!-- Ticket Themebox -->
+									<a href="?subtopic=ticket">
+										<div id="supportButton" class="Themebox"
+										style="height: 70px; margin-bottom: 0px; background-image:url(<?php echo $layout_name; ?>/images/global/themeboxes/ticket/support.png);"></div>
+									</a>
+                                    
+									<!-- current poll theme box -->
                                         <?php
                                         $date = time();
                                         $getPolls = $SQL->query("SELECT * FROM `z_polls` LIMIT 1")->fetchAll();
@@ -772,7 +679,6 @@ if(!defined('INITIALIZED'))
                             </div>
 
                             <div id="Footer">
-                                <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
                                 Copyright by <a href="https://www.cipsoft.com" target="_new"><b>CipSoft GmbH</b></a>. All rights reserveds<br>
                                 <a href=?subtopic=forum><b>Game Forum</b></a> | <a href=<?php echo $config['social']['facebook']; ?>><b>Facebook</b></a> | <a href=?subtopic=team><b>Support Game</b></a><br>
                             </div>
@@ -837,9 +743,34 @@ if(!defined('INITIALIZED'))
         fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     </script>
-	<script src="<?php echo $layout_name; ?>/js/facebook/pace.min.js" data-pace-options='{ "elements": false, "startOnPageLoad": true, "ajax": false, "restartOnRequestAfter": false }'></script>
-    <!-- float facebook like box start -->
-    <script id="float_fb" src="<?php echo $layout_name; ?>/js/facebook/fb_float_plugin.js" data-href="<?php echo $config['social']['facebook']; ?>" async></script>
-    <!-- float facebook like box end -->
-</body>
+	
+	<!-- Discord -->
+	<!--<script id="float_discord" src="<?php echo $layout_name; ?>/js/discord/discord_float_plugin.js" data-id="<?php echo $config['social']['discord']; ?>" async></script>-->
+	
+    <!-- Facebook -->
+    <script id="float_fb" src="<?php echo $layout_name; ?>/js/facebook/fb_float_plugin.js" data-href="<?php echo $config['social']['facebook']; ?>" async></script> ﻿
+	
+	<!-- PageUp -->
+    <script>
+        $(document).ready(function(){
+    
+            //Check to see if the window is top if not then display button
+            $(window).scroll(function(){
+                if ($(this).scrollTop() > 100) {
+                    $('.scrollToTop').fadeIn();
+                } else {
+                    $('.scrollToTop').fadeOut();
+                }
+            });
+    
+            //Click event to scroll to top
+            $('.scrollToTop').click(function(){
+                $('html, body').animate({scrollTop : 0},800);
+                return false;
+            });
+    
+        });
+    </script>
+    <div class="scrollToTop"></div>
+	</body>
 </html>

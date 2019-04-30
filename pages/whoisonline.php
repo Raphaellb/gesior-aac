@@ -153,7 +153,7 @@ $main_content .= '
 							</tr>
 							<tr>
 								<td class="LabelV200" >Creation Date:</td>
-								<td>19/01/2017</td>
+								<td>01/01/2019</td>
 							</tr>
 							<tr>
 								<td class="LabelV200" >Location:</td>

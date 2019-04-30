@@ -13,6 +13,7 @@ if($logged)
     $color[] = yellow; // for <=50% 
     $color[] = green; // for >50% 
     $time = time(); 
+    $POLLS = filter_var($POLLS, FILTER_SANITIZE_STRING);
     $POLLS = $SQL->query('SELECT * FROM '.$SQL->tableName('z_polls').''); 
     $level = 120; // need level to vote 
 

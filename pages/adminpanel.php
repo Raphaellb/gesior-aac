@@ -12,7 +12,7 @@ if($logged)
 						<tbody>
 							<tr>
 								<td><img src="'.$layout_name.'/images/global/content/headline-bracer-left.gif"></td>
-								<td style="text-align:center;vertical-align:middle;horizontal-align:center;font-size:17px;font-weight:bold;">Admin Panel, welcome '.$account_logged->getRLName().'!<br></td>
+								<td style="text-align:center;vertical-align:middle;horizontal-align:center;font-size:17px;font-weight:bold;">Welcome '.$config['server']['serverName'].' Admin Panel'.$account_logged->getRLName().'!<br></td>
 								<td><img src="'.$layout_name.'/images/global/content/headline-bracer-right.gif"></td>
 							</tr>
 						</tbody>
@@ -48,6 +48,10 @@ if($logged)
 													</div>
 													<div class="TableContentAndRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rm.gif);" >
 														<div class="TableContentContainer" >';
+														$playersCount = filter_var($playersCount, FILTER_SANITIZE_STRING);
+														$accountsCount = filter_var($accountsCount, FILTER_SANITIZE_STRING);
+														$guildsCount = filter_var($guildsCount, FILTER_SANITIZE_STRING);
+														$shopsCount = filter_var($shopsCount, FILTER_SANITIZE_STRING);
 														$playersCount = $SQL->query("SELECT COUNT(*) FROM `players`")->fetch();
 														$accountsCount = $SQL->query("SELECT COUNT(*) FROM `accounts`")->fetch();
 														$guildsCount = $SQL->query("SELECT COUNT(*) FROM `guilds`")->fetch();
@@ -119,6 +123,7 @@ if($logged)
 															<table class="TableContent" width="100%">
 																<tr style="background-color:#D4C0A1;" >
 																	<td class="LabelV" >The last one:</td>';
+																$get_ticker = filter_var($get_ticker, FILTER_SANITIZE_STRING);
 																$get_ticker = $SQL->query("SELECT * FROM `newsticker` ORDER BY `date` DESC LIMIT 1")->fetchAll();
 																if (count($get_ticker) > 0)
 																	foreach($get_ticker as $ticker)
@@ -206,6 +211,7 @@ if($logged)
 															<table class="TableContent" width="100%">
 																<tr>
 																	<td valign="middle" class="LabelV" width="90%">Double Coins Status</td>';
+																$doubleStatus = filter_var($doubleStatus, FILTER_SANITIZE_STRING);
 																$doubleStatus = $SQL->query("SELECT `value` FROM `server_config` WHERE `config` = 'double'")->fetch();
 																$main_content .= '
 																	<td>
@@ -239,7 +245,7 @@ if($logged)
 													<div class="TableContentAndRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rm.gif);" >
 														<div class="TableContentContainer" >
 															<table class="TableContent" width="100%">';
-															
+														$get_Categories = filter_var($get_Categories, FILTER_SANITIZE_STRING);
 														$get_Categories = $SQL->query("SELECT * FROM `z_shop_category` ORDER BY `name` ASC");
 														$cat_number = 0;
 														foreach($get_Categories as $cat) {
@@ -275,11 +281,13 @@ if($logged)
 							</tr>
 							<tr>
 								<td align="center">
+								<br>
 									<form method="post" action="?subtopic=adminpanel&action=history">
 										<div class="BigButton" style="background-image:url('.$layout_name.'/images/global/buttons/sbutton_green.gif)" >
 											<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/global/buttons/sbutton_green_over.gif);" ></div>
 												<input class="ButtonText" type="image" name="Back" alt="Back" src="'.$layout_name.'/images/global/buttons/_sbutton_viewhistory.gif" >
 											</div>
+											<br>
 										</div>
 									</form>
 								</td>
@@ -478,9 +486,10 @@ if($logged)
 																	function porcentagem_xn ( $porcentagem, $total ) {
 																			return ( $porcentagem / 100 ) * $total;
 																		}
-																	$getBalance = $SQL->query("SELECT `price` FROM `z_shop_donates` WHERE YEAR(FROM_UNIXTIME(date)) = YEAR(CURDATE()) AND MONTH(FROM_UNIXTIME(date)) = MONTH(CURDATE()) AND `status` = 'received'")->fetchAll();
+																	$getBalance = filter_var($getBalance, FILTER_SANITIZE_STRING);
+																	$getBalance = $SQL->query("SELECT `payment_amount` FROM `pagseguro_transactions` WHERE YEAR(data) = YEAR(CURDATE()) AND MONTH(data) = MONTH(CURDATE())AND `status` IN ('DELIVERED')")->fetchAll();
 																	foreach($getBalance as $balance) {
-																		$somaBalance += $balance['price'];
+																		$somaBalance += $balance['payment_amount'];
 																	}
 																		$main_content .= '
 																			<span class="red">
@@ -488,7 +497,6 @@ if($logged)
 																			</span>
 																			<small>
 																				<br>Saldo total de todas as doações realizadas no mês de '.date('F').'.<br>
-																				(Marco Oliveira possui 50% dos lucros, um total de <span class="red">R$ '.number_format(porcentagem_xn(50,$somaBalance), 2, ',', '.').'</span>
 																			</small>
 																		</td>				
 																	</tr>
@@ -512,26 +520,7 @@ if($logged)
 				</tbody>
 			</table>
 			<br>';
-			$main_content .= '
-			<div class="SmallBox" >
-				<div class="MessageContainer" >
-					<div class="BoxFrameHorizontal" style="background-image:url('.$layout_name.'/images/global/content/box-frame-horizontal.gif);" /></div>
-					<div class="BoxFrameEdgeLeftTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);" /></div>
-					<div class="BoxFrameEdgeRightTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);" /></div>
-					<div class="Message">
-						<div class="BoxFrameVerticalLeft" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);" /></div>
-						<div class="BoxFrameVerticalRight" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);" /></div>
-						<table style="width:100%;" >
-							<td style="width:100%;text-align:center;" ><nobr>[<a href="#Ultimos+Servicos" >Últimos serviços comprados</a>]</nobr> <nobr>[<a href="#Confirmed" >Daoações confirmadas</a>]</nobr> <nobr>[<a href="#Pagseguro" >Pagseguro</a>]</nobr> <nobr>[<a href="#Bank+Transfer" >Transferência bancárias</a>]</nobr> <nobr>[<a href="#Paypal" >Paypal</a>]</nobr></td>
-						</tr>
-					</table>
-				</div>
-				<div class="BoxFrameHorizontal" style="background-image:url('.$layout_name.'/images/global/content/box-frame-horizontal.gif);" /></div>
-				<div class="BoxFrameEdgeRightBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);" /></div>
-				<div class="BoxFrameEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);" /></div>
-			</div>
-		</div>
-		<br/>';
+
 			$main_content .= '
 				<a name="Ultimos+Servicos" ></a>
 				<div class="TopButtonContainer" >
@@ -569,12 +558,15 @@ if($logged)
 													<div class="TableContentAndRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rm.gif);" >
 														<div class="TableContentContainer" >
 															<table class="TableContent" width="100%">';
+														$get_Services = filter_var($get_Services, FILTER_SANITIZE_STRING);
 														$get_Services = $SQL->query("SELECT * FROM `z_shop_payment` ORDER BY `date` DESC LIMIT 5")->fetchAll();
-														$getCountServices = $SQL->query("SELECT COUNT(*) FROM `z_shop_payment` WHERE `status` = 'received'")->fetchColumn();
+														$getCountServices = filter_var($getCountServices, FILTER_SANITIZE_STRING);
+														$getCountServices = $SQL->query("SELECT COUNT(*) FROM `z_shop_payment` WHERE `status` IN ('received', 'ready')")->fetchColumn();
 														if($getCountServices > 0) {
 															$main_content .= '
 																	<tr>';
 															foreach($get_Services as $service) {
+																$get_historyService = filter_var($get_historyService, FILTER_SANITIZE_STRING);
 																$get_historyService = $SQL->query("SELECT * FROM `z_shop_offer` WHERE `id` = '".$service['service_id']."'")->fetch();
 																$pathToService = "";
 																if ($get_historyService['category'] == 2)
@@ -589,9 +581,9 @@ if($logged)
 																$main_content .= '
 																		<td>
 																			<center>
-																				<img src="'.$layout_name.'/'.$pathToService.'" alt="Tibiamax"/><br>
+																				<img src="'.$layout_name.'/'.$pathToService.'" alt="Tibiamax" width="80%" /><br>
 																				<small><strong>'.$get_historyService['offer_name'].'</strong></small><br>
-																				<small>(Comprado com a conta: <strong>'.$service['account_name'].'</strong>)</small>
+																				<small>(Account name: '.$service['account_name'].')</small>
 																			</center>
 																		</td>';
 																
@@ -638,98 +630,7 @@ if($logged)
 						</tbody>
 					</table>
 				</div><br>';
-			$main_content .= '
-				<a name="Confirmed" ></a>
-				<div class="TopButtonContainer" >
-					<div class="TopButton" >
-						<a href="#top" >
-							<image style="border:0px;" src="'.$layout_name.'/images/global/content/back-to-top.gif" />
-						</a>
-					</div>
-				</div>
-				<div class="TableContainer">
-					<div class="CaptionContainer">
-						<div class="CaptionInnerContainer"> 
-							<span class="CaptionEdgeLeftTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-							<span class="CaptionEdgeRightTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-							<span class="CaptionBorderTop" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span> 
-							<span class="CaptionVerticalLeft" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span>
-							<div class="Text">Últimas 10 doações confirmadas</div>
-							<span class="CaptionVerticalRight" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span> 
-							<span class="CaptionBorderBottom" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span> 
-							<span class="CaptionEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-							<span class="CaptionEdgeRightBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-						</div>
-					</div>
-					<table class="Table3" cellpadding="0" cellspacing="0">
-						<tbody>
-							<tr>
-								<td>
-									<div class="InnerTableContainer" >
-										<table style="width:100%;" >
-											<tr>
-												<td>
-													<div class="TableShadowContainerRightTop" >
-														<div class="TableShadowRightTop" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rt.gif);" ></div>
-													</div>
-													<div class="TableContentAndRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rm.gif);" >
-														<div class="TableContentContainer" >
-															<table class="TableContent" width="100%">
-																<tr bgcolor="#D4C0A1">';
-															$get_OrdersConfirmed = $SQL->query("SELECT * FROM `z_shop_donates` WHERE `status` = 'confirmed' ORDER BY `date` DESC LIMIT 10")->fetchAll();
-															$getCountOrders = $SQL->query("SELECT COUNT(*) FROM `z_shop_donates` WHERE `status` = 'confirmed'")->fetchColumn();
-																$main_content .= '
-																	<td class="LabelV">Date</td>
-																	<td class="LabelV">Service</td>
-																	<td class="LabelV">Price</td>																	
-																	<td class="LabelV">Method</td>
-																	<td class="LabelV">Bank Name</td>
-																	<td class="LabelV">Status</td>
-																	<td class="LabelV"></td>
-																</tr>';
-														
-														$n = 0;
-														if($getCountOrders > 0)														
-															foreach($get_OrdersConfirmed as $order) {
-																$bgcolor = (($n++ % 2 == 1) ?  $config['site']['darkborder'] : $config['site']['lightborder']);
-																$main_content .= '
-																	<tr bgcolor="'.$bgcolor.'">
-																		<td>'.date("M d Y, G:i:s", $order['date']).'</td>
-																		<td>'.$order['coins'].' Tibia Coins</td>
-																		<td>'.$order['price'].' BRL</td>
-																		<td>'.$order['method'].'</td>';
-																		$bankref = explode("-",$order['reference']);
-																		$bankName = $bankref[1];
-																		$main_content .= '<td>'.$bankName.'</td>';
-																$main_content .= '
-																		<td>'.$order['status'].'</td>
-																		<td>'.(($order['status'] == "confirmed") ? '[<a href="?subtopic=adminpanel&action=sendPoints&orderID='.$order['id'].'">view</a>]' : '').'</td>
-																	</tr>';
-															}
-														else
-															$main_content .= '
-																<tr bgcolor="'.$config['site']['lightborder'].'">
-																	<td colspan="7">Nenhuma doação confirmada ainda.</td>
-																</tr>';
-														$main_content .= '
-															</table>
-														</div>
-													</div>
-													<div class="TableShadowContainer" >
-														<div class="TableBottomShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-bm.gif);" >
-															<div class="TableBottomLeftShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-bl.gif);" ></div>
-															<div class="TableBottomRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-br.gif);" ></div>
-														</div>
-													</div>
-												</td>
-											</tr>
-										</table>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div><br>';
+
 			$main_content .= '
 				<a name="Pagseguro" ></a>
 				<div class="TopButtonContainer" >
@@ -746,7 +647,7 @@ if($logged)
 							<span class="CaptionEdgeRightTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
 							<span class="CaptionBorderTop" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span> 
 							<span class="CaptionVerticalLeft" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span>
-							<div class="Text">10 últimas doações realizadas por PagSeguro</div>
+							<div class="Text">Doações realizadas por PagSeguro no mês</div>
 							<span class="CaptionVerticalRight" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span> 
 							<span class="CaptionBorderBottom" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span> 
 							<span class="CaptionEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
@@ -770,44 +671,36 @@ if($logged)
 																<tr bgcolor="#D4C0A1">
 																	<td class="LabelV">Data</td>
 																	<td class="LabelV">Código da Transação</td>
-																	<td class="LabelV">Referência/Nome da conta</td>
+																	<td class="LabelV">Account Name</td>
 																	<td class="LabelV">Valor</td>
 																	<td class="LabelV">Status</td>
 																	
 																</tr>';
-														$status_pagamento = array(
-															1 => "Aguardando pagamento",
-															2 => "Em análise",
-															3 => "Paga",
-															4 => "Disponivel",
-															5 => "Em disputa",
-															6 => "Devolvida",
-															7 => "Cancelada",
-															8 => "Chargeback debitado",
-															9 => "Em contestação"
-														);
-														$get_Pagseguro = $SQL->query("SELECT * FROM `pagseguro` ORDER BY `date` DESC LIMIT 10")->fetchAll();
-														$getCountPagseguro = $SQL->query("SELECT COUNT(*) FROM `pagseguro`")->fetchColumn();
+														
+														$get_Pagseguro = $SQL->query("SELECT * FROM `pagseguro_transactions` WHERE YEAR(data) = YEAR(CURDATE()) AND MONTH(data) = MONTH(CURDATE())AND `status` IN ('DELIVERED') GROUP BY  `transaction_code` ORDER BY `data` DESC")->fetchAll();
+														$getCountPagseguro = $SQL->query("SELECT COUNT(*) FROM `pagseguro_transactions`")->fetchColumn();
+
 														$n = 0;
 														if($getCountPagseguro > 0)														
 															foreach($get_Pagseguro as $pagseguro) {
 																$bgcolor = (($n++ % 2 == 1) ?  $config['site']['darkborder'] : $config['site']['lightborder']);
-																$refPagseguro = explode("-",$pagseguro['reference']);
+																$refPagseguro = explode("-",$pagseguro['name']);
 																$refPag = $refPagseguro[0];
-																$getPriceService = $SQL->query("SELECT `price` FROM ``");
+																$getPriceService = $SQL->query("SELECT `payment_amount` FROM ``");
 																$main_content .= '
+																<center>
 																	<tr bgcolor="'.$bgcolor.'">
-																		<td>'.$pagseguro['date'].'</td>';
+																		<small><td>'.$pagseguro['data'].'</td></small>';
 																	$main_content .= '
-																		<td>'.$pagseguro['code'].'</td>
-																		<td>'.$pagseguro['reference'].'</td>';
-																	$getReference = explode("-",$pagseguro['reference']);
+																		<small><td>'.$pagseguro['transaction_code'].'</td></small>
+																		<small><td>'.$pagseguro['name'].'</td></small>';
+																	$getReference = explode("-",$pagseguro['name']);
 																	$pagseguroReference = $getReference[0];
-																	$getValor = $SQL->query("SELECT `price` FROM `z_shop_donates` WHERE `reference` = '$pagseguroReference'")->fetch();
 																	$main_content .= '
-																		<td>'.number_format($getValor['price'], 2, ',', '.').'</td>
-																		<td>'.$status_pagamento[$pagseguro['status']].'</td>';
+																		<small><td>'.number_format($pagseguro['payment_amount'], 2, ',', '.').'</td></small>
+																		<small><td>'.$pagseguro['status'].'</td></small>';
 																$main_content .= '
+																<center>
 																	</tr>';
 															}
 														else
@@ -851,108 +744,7 @@ if($logged)
 						</tbody>
 					</table>
 				</div><br>';
-				$main_content .= '
-				<a name="Bank+Transfer" ></a>
-				<div class="TopButtonContainer" >
-					<div class="TopButton" >
-						<a href="#top" >
-							<image style="border:0px;" src="'.$layout_name.'/images/global/content/back-to-top.gif" />
-						</a>
-					</div>
-				</div>
-				<div class="TableContainer">
-					<div class="CaptionContainer">
-						<div class="CaptionInnerContainer"> 
-							<span class="CaptionEdgeLeftTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-							<span class="CaptionEdgeRightTop" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-							<span class="CaptionBorderTop" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span> 
-							<span class="CaptionVerticalLeft" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span>
-							<div class="Text">10 últimas doações realizadas por transferência bancária</div>
-							<span class="CaptionVerticalRight" style="background-image:url('.$layout_name.'/images/global/content/box-frame-vertical.gif);"></span> 
-							<span class="CaptionBorderBottom" style="background-image:url('.$layout_name.'/images/global/content/table-headline-border.gif);"></span> 
-							<span class="CaptionEdgeLeftBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-							<span class="CaptionEdgeRightBottom" style="background-image:url('.$layout_name.'/images/global/content/box-frame-edge.gif);"></span> 
-						</div>
-					</div>
-					<table class="Table3" cellpadding="0" cellspacing="0">
-						<tbody>
-							<tr>
-								<td>
-									<div class="InnerTableContainer" >
-										<table style="width:100%;" >
-											<tr>
-												<td>
-													<div class="TableShadowContainerRightTop" >
-														<div class="TableShadowRightTop" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rt.gif);" ></div>
-													</div>
-													<div class="TableContentAndRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-rm.gif);" >
-														<div class="TableContentContainer" >
-															<table class="TableContent" width="100%">
-																<tr bgcolor="#D4C0A1">
-																	<td class="LabelV">Data</td>
-																	<td class="LabelV">Referência</td>
-																	<td class="LabelV">Nome da conta</td>
-																	<td class="LabelV">Valor</td>
-																	<td class="LabelV">Status</td>
-																</tr>';
-														$get_Transfers = $SQL->query("SELECT * FROM `z_shop_donates` WHERE `method` = 'banktransfer' ORDER BY `date` DESC LIMIT 10")->fetchAll();
-														$getCountTransfers = $SQL->query("SELECT COUNT(*) FROM `z_shop_donates` WHERE `method` = 'banktransfer'")->fetchColumn();
-														$n = 0;
-														if($getCountTransfers > 0)														
-															foreach($get_Transfers as $transfer) {
-																$bgcolor = (($n++ % 2 == 1) ?  $config['site']['darkborder'] : $config['site']['lightborder']);
-																$main_content .= '
-																	<tr bgcolor="'.$bgcolor.'">
-																		<td>'.date("M d Y, G:i:s",$transfer['date']).'</td>';
-																	$main_content .= '
-																		<td>'.$transfer['reference'].'</td>
-																		<td>'.$transfer['account_name'].'</td>
-																		<td>'.number_format($transfer['price'], 2, ',', '.').'</td>
-																		<td>'.$transfer['status'].'</td>';
-																$main_content .= '
-																	</tr>';
-															}
-														else
-															$main_content .= '
-																<tr bgcolor="'.$config['site']['lightborder'].'">
-																	<td colspan="5">Nenhuma doação realizada ainda.</td>
-																</tr>';
-														$main_content .= '
-															</table>
-														</div>
-													</div>
-													<div class="TableShadowContainer" >
-														<div class="TableBottomShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-bm.gif);" >
-															<div class="TableBottomLeftShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-bl.gif);" ></div>
-															<div class="TableBottomRightShadow" style="background-image:url('.$layout_name.'/images/global/content/table-shadow-br.gif);" ></div>
-														</div>
-													</div>
-												</td>
-											</tr>';
-									if($getCountTransfers > 10)
-										$main_content .= '
-											<tr>
-												<td align="center">
-													<form method="post" action="?subtopic=adminpanel&action=historymore">
-														<input type="hidden" name="service" value="transfer">
-														<div class="BigButton" style="background-image:url('.$layout_name.'/images/global/buttons/sbutton_green.gif)" >
-															<div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url('.$layout_name.'/images/global/buttons/sbutton_green_over.gif);" ></div>
-																<input class="ButtonText" type="image" name="Back" alt="Back" src="'.$layout_name.'/images/global/buttons/_sbutton_vermais.gif" >
-															</div>
-														</div>
-													</form>
 
-												</td>
-											</tr>';
-									$main_content .= '
-										</table>
-									</div>
-								</td>
-							</tr>
-							
-						</tbody>
-					</table>
-				</div><br>';
 			$main_content .= '
 				<a name="Paypal" ></a>
 				<div class="TopButtonContainer" >
@@ -1219,44 +1011,31 @@ if($logged)
 																<tr bgcolor="#D4C0A1">
 																	<td class="LabelV">Data</td>
 																	<td class="LabelV">Código da Transação</td>
-																	<td class="LabelV">Referência/Nome da conta</td>
+																	<td class="LabelV">Account Name</td>
 																	<td class="LabelV">Valor</td>
 																	<td class="LabelV">Status</td>
-																	
 																</tr>';
-														$status_pagamento = array(
-															1 => "Aguardando pagamento",
-															2 => "Em análise",
-															3 => "Paga",
-															4 => "Disponivel",
-															5 => "Em disputa",
-															6 => "Devolvida",
-															7 => "Cancelada",
-															8 => "Chargeback debitado",
-															9 => "Em contestação"
-														);
-														$get_Pagseguro = $SQL->query("SELECT * FROM `pagseguro` ORDER BY `date` DESC LIMIT 40")->fetchAll();
-														$getCountPagseguro = $SQL->query("SELECT COUNT(*) FROM `pagseguro`")->fetchColumn();
+
+														$get_Pagseguro = $SQL->query("SELECT * FROM `pagseguro_transactions` WHERE YEAR(data) = YEAR(CURDATE()) AND MONTH(data) = MONTH(CURDATE()) ORDER BY `data` DESC")->fetchAll();
+														$getCountPagseguro = $SQL->query("SELECT COUNT(*) FROM `pagseguro_transactions`")->fetchColumn();
 														$n = 0;
 														if($getCountPagseguro > 0)														
 															foreach($get_Pagseguro as $pagseguro) {
 																$bgcolor = (($n++ % 2 == 1) ?  $config['site']['darkborder'] : $config['site']['lightborder']);
-																$refPagseguro = explode("-",$pagseguro['reference']);
+																$refPagseguro = explode("-",$pagseguro['name']);
 																$refPag = $refPagseguro[0];
-																$getPriceService = $SQL->query("SELECT `price` FROM ``");
+																$getPriceService = $SQL->query("SELECT `payment_amount` FROM ``");
 																$main_content .= '
 																	<tr bgcolor="'.$bgcolor.'">
-																		<td>'.$pagseguro['date'].'</td>';
+																		<td>'.$pagseguro['data'].'</td>';
 																	$main_content .= '
-																		<td>'.$pagseguro['code'].'</td>
-																		<td>'.$pagseguro['reference'].'</td>';
-																	$getReference = explode("-",$pagseguro['reference']);
-																	$pagseguroReference = $getReference[0];
-																	$getValor = $SQL->query("SELECT `price` FROM `z_shop_donates` WHERE `reference` = '$pagseguroReference'")->fetch();
+																		<td>'.$pagseguro['transaction_code'].'</td>
+																		<td>'.$pagseguro['name'].'</td>';
+																	$getReference = explode("-",$pagseguro['name']);
 																	$main_content .= '
-																		<td>'.number_format($getValor['price'], 2, ',', '.').'</td>
-																		<td>'.$status_pagamento[$pagseguro['status']].'</td>';
-																$main_content .= '
+																		<td>'.$pagseguro['payment_amount'].'</td>
+																		<td>'.$pagseguro['status'].'</td>';
+																	$main_content .= '
 																	</tr>';
 															}
 														else
@@ -1399,7 +1178,7 @@ if($logged)
 																<tr bgcolor="#D4C0A1">
 																	<td class="LabelV">Data</td>
 																	<td class="LabelV">Referência</td>
-																	<td class="LabelV">Nome da conta</td>
+																	<td class="LabelV">Account Name</td>
 																	<td class="LabelV">Valor</td>
 																	<td class="LabelV">Status</td>
 																</tr>';

@@ -14,6 +14,7 @@ $news_content .= '
       		<div class="Border_3">
         		<div class="BoxContent" style="background-image:url('.$layout_name.'/images/global/content/scroll.gif);">';
 				//Show Tickers
+				$tickers = filter_var($tickers, FILTER_SANITIZE_STRING);
 				$tickers = $SQL->query('SELECT * FROM '.$SQL->tableName('newsticker').' ORDER BY '.$SQL->fieldName('date').' DESC LIMIT 7;');
 				$number_of_tickers = 0;
 				if(is_object($tickers))
@@ -67,7 +68,7 @@ $news_content .= '
 							<img src="'.$layout_name.'/images/news/announcement.gif" width="150" height="100" border="0" alt="">
 						</div>
                     <div style="position: relative; top: -9px; margin-bottom: 10px;"><br>
-				 <font size="2px"></font><center><font size="2px"><b> IP:</b> tibia.com |&nbsp;  <b>Port:</b> 7171 |&nbsp;  <b>Version:</b> 10.00 and 11.50</font> <br> </a></center><br><font size="2px"><b>'.$config['server']['serverName'].'</b> - <a href="/?subtopic=serverinfo" <b="">Server Info</a> - <small>(learn to do <b><a href="/?subtopic=serverinfo&action=tutorialdonate" <b="">Donate</a></b> and use our <b><a href="/?subtopic=serverinfo&action=tutorialshop" <b="">Shop Online</a></b>)</small> <br><br> Welcome to <b><font color="green">'.$config['server']['serverName'].'</font></b>, we count on map most complete of all servers currently, Cooldown and reworked Spells for a more dynamic and fun PvP.<br>Several bugs fixed and being fixed daily. Come check out the best server of all time! <br><a href="/?subtopic=createaccount" <b="">Create your account now</a> here your fun is guaranteed!
+				 <font size="2px"></font><center><font size="2px"><b> IP:</b> tibia.com |&nbsp;  <b>Port:</b> 7171 |&nbsp;  <b>Version:</b> 10 and 12</font> <br> </a></center><br><font size="2px"><b>'.$config['server']['serverName'].'</b> - <a href="/?subtopic=serverinfo" <b="">Server Info</a> - <small>(learn to do <b><a href="/?subtopic=serverinfo&action=tutorialdonate" <b="">Donate</a></b> and use our <b><a href="/?subtopic=serverinfo&action=tutorialshop" <b="">Shop Online</a></b>)</small> <br><br> Welcome to <b><font color="green">'.$config['server']['serverName'].'</font></b>, we count on map most complete of all servers currently, Cooldown and reworked Spells for a more dynamic and fun PvP.<br>Several bugs fixed and being fixed daily. Come check out the best server of all time! <br><a href="/?subtopic=createaccount" <b="">Create your account now</a> here your fun is guaranteed!
                 </font> </div>
 						<a id="Link" style="position: absolute; margin-bottom: 10px; top: 40px;" href="?subtopic=newsarchive&view=1">» read more</a>
 						</div>
@@ -171,7 +172,7 @@ function showPost($topic, $text, $smile)
 }
 //End Functions
 
-//Most Powerfull Guilds
+/*Most Powerfull Guilds
 	$main_content .= '
 <div class="InnerTableContainer">
 					<div class="TableShadowContainerRightTop">
@@ -226,9 +227,10 @@ function showPost($topic, $text, $smile)
 		</table>
 	</div>
 <br />';
-//Most Powerfull Guilds End
+//Most Powerfull Guilds End*/
 
 //Here start news
+	$last_threads = filter_var($last_threads, FILTER_SANITIZE_STRING);
 	$last_threads = $SQL->query('SELECT ' . $SQL->tableName('players') . '.' . $SQL->fieldName('name') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('post_text') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('post_topic') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('icon_id') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('news_icon') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('post_smile') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('id') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('replies') . ', ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('post_date') . ' FROM ' . $SQL->tableName('players') . ', ' . $SQL->tableName('z_forum') . ' WHERE ' . $SQL->tableName('players') . '.' . $SQL->fieldName('id') . ' = ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('author_guid') . ' AND ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('section') . ' = 1 AND ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('first_post') . ' = ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('id') . ' ORDER BY ' . $SQL->tableName('z_forum') . '.' . $SQL->fieldName('post_date') . ' DESC LIMIT ' . $config['site']['news_limit'])->fetchAll();
 	
     if(isset($last_threads[0]))

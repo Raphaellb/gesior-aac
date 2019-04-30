@@ -112,7 +112,7 @@ if (!$logged) {
                 <br/>';
 
             $main_content .= '
-			<script src="' . $layout_name . '/create_character.js"></script>
+			<script src="' . $layout_name . '/js/create_character.js"></script>
 			<div style="position:relative;top:0px;left:0px;" >
 				<form action="?subtopic=createaccount" method=post name="CreateAccountAndCharacter" >
 					<div class="TableContainer" >
@@ -414,7 +414,7 @@ if (!$logged) {
     } else {
 
         $main_content .= '
-			<script src="' . $layout_name . '/create_character.js"></script>
+			<script src="' . $layout_name . '/js/create_character.js"></script>
 			<div style="position:relative;top:0px;left:0px;" >
 				<form action="?subtopic=createaccount" method=post name="CreateAccountAndCharacter" >
 					<div class="TableContainer" >

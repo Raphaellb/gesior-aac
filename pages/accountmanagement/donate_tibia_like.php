@@ -92,7 +92,7 @@ if ($logged) {
         }
 
         $main_content .= '
-    <script src="' . $layout_name . '/changepmctibia.js"></script>
+    <script src="' . $layout_name . '/js/changepmctibia.js"></script>
     <form method="POST">
     <div class="TableContainer">
     <div class="CaptionContainer">

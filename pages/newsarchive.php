@@ -2,6 +2,7 @@
 if(!defined('INITIALIZED'))
 	exit;
 if ($action == ""){
+$news_DB = filter_var($news_DB, FILTER_SANITIZE_STRING);
 $news_DB = $SQL->query("SELECT * FROM `z_forum` WHERE `section` = '1' AND `z_forum`.`id` = `first_post` ORDER BY `post_date` DESC LIMIT 25");
 if(empty($_REQUEST['view']))
 {	$main_content .= '
@@ -161,7 +162,7 @@ if(empty($news))
 $main_content .= '
 <TABLE BORDER="0" CELLSPACING="0" CELLPADDING="7" WIDTH="100%">
 <TR BGCOLOR='.$config['site']['darkborder'].'>
-<TD> </TD>
+<TD> </TD>
 </TR>
 </TABLE>';}
 if ($action == "tickets"){
@@ -238,6 +239,7 @@ $main_content .='
 ';
 }
 if ($action == "tickett"){
+$qry_tickets = filter_var($qry_tickets, FILTER_SANITIZE_STRING);
 $qry_tickets = $SQL->query("SELECT * FROM newstickers ORDER BY `date` DESC LIMIT 25");
 	foreach($qry_tickets as $row)
 	{

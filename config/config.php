@@ -31,6 +31,7 @@ if ($is_https) {
 }
 
 $config['base_url'] = $base_url;
+$config['site']['base_url'] = $base_url;
 
 # Using Ajax Field Validation, this is important if you want to use ajax check in your create account.
 $config['site']['sqlHost'] = "localhost";
@@ -90,6 +91,7 @@ $config['paypal']['email'] = "";
 
 # Social Networks
 $config['social']['facebook'] = "https://www.facebook.com/tibia";
+$config['social']['discord'] = "";
 
 # Character Former name, time in days to show the former names
 $config['site']['formerNames'] = 10;
@@ -114,21 +116,26 @@ $config['site']['serverPath'] = "/";
 $config['site']['encryptionType'] = 'sha1';
 $config['site']['useServerConfigCache'] = false;
 $towns_list = array(
-    1 => 'Venore', 
-    2 => 'Thais', 
-    3 => 'Kazordoon', 
-    4 => 'Carlin', 
-    5 => 'Ab\'Dendriel',     
-    7 => 'Liberty Bay', 
-    8 => 'Port Hope', 
-    9 => 'Ankrahmun', 
-    10 => 'Darashia', 
-    11 => 'Edron', 
-    12 => 'Svargrond', 
-    13 => 'Yalahar', 
-    14 => 'Farmine', 
-    28 => 'Gray Beach',    
-    33 => 'Rathleton',
+	1 => 'Venore',
+	2 => 'Thais',
+	3 => 'Kazordoon',
+	4 => 'Carlin',
+	5 => 'Ab\'Dendriel',
+	6 => 'Rookgaard',
+	7 => 'Liberty Bay',
+	8 => 'Port Hope',
+	9 => 'Ankrahmun',
+	10 => 'Darashia',
+	11 => 'Edron',
+	12 => 'Svargrond',
+	13 => 'Yalahar',
+	14 => 'Farmine',
+	28 => 'Gray Beach',
+	29 => 'Roshamuul',
+	33 => 'Rathleton',
+	34 => 'Krailos',
+	51 => 'Dawnport',
+	52 => 'Feyrist'
 );
 
 # Create Account Options
@@ -142,7 +149,7 @@ $config['site']['flash_client_enabled'] = false;
 
 # Create Character Options
 $config['site']['newchar_vocations'] = array(0 => 'Rook Sample');
-$config['site']['newchar_towns'] = array(6);
+$config['site']['newchar_towns'] = array(1);
 $config['site']['max_players_per_account'] = 7;
 
 # Emails Config
@@ -172,7 +179,7 @@ $config['site']['guild_description_lines_limit'] = 6;
 $config['site']['guild_motd_chars_limit'] = 250;
 
 # PAGE: adminpanel.php
-$config['site']['access_admin_panel'] = 3;
+$config['site']['access_admin_panel'] = 6;
 
 # PAGE: latestnews.php
 $config['site']['news_limit'] = 6;

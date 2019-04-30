@@ -24,6 +24,12 @@ class Player extends ObjectData
 			$this->load($search_text, $search_by);
     }
 
+	public function getExpForLevel ($lv)
+    {
+        $lv--;
+        return ((50 * $lv * $lv * $lv) - (150 * $lv * $lv) + (400 * $lv)) / 3;
+    }
+	
 	public function load($search_text, $search_by = self::LOADTYPE_ID)
 	{
 		if(in_array($search_by, self::$fields))

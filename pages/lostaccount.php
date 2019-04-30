@@ -2,12 +2,9 @@
 if(!defined('INITIALIZED'))
 	exit;
 
-if($config['site']['send_emails'])
-{
-	if(!$logged)
-	{
-		if(!isset($_REQUEST['step']))
-		{
+if($config['site']['send_emails']){
+	if(!$logged)	{
+		if(!isset($_REQUEST['step'])){
 			$main_content .= '
 				 <B>Welcome to the Lost Account Interface!</B><BR>
 				<BR>
@@ -77,13 +74,11 @@ if($config['site']['send_emails'])
 			</TR>
 		</TABLE>';
 		}
-		if($_REQUEST['step'] == "problem")
-		{
+		if($_REQUEST['step'] == "problem")		{
 			$character = trim(stripslashes($_POST['character']));
 			$char = new Player();
 			$char->find($character);
-			if($char->isLoaded())
-			{
+			if($char->isLoaded()) {
 				$main_content .= '
 					 The Lost Account Interface can help you to solve all problems listed below. Please select your problem and click on "Submit".<BR>
 					<BR>
@@ -250,8 +245,7 @@ if($config['site']['send_emails'])
 			</TR>
 		</TABLE>';
 		}
-		if($_REQUEST['step'] == "password")
-		{
+		if($_REQUEST['step'] == "password") {
 			$character = trim(stripslashes($_POST['character']));
 			$main_content .= '
 				Please follow the instructions below to get a new password via email.
@@ -316,7 +310,7 @@ if($config['site']['send_emails'])
 			$char->find($character);
 			$account = new Account();
 			$account->loadById($char->getAccountID());
-			
+
 			if(!$account->isValidPassword($password) || $email != $account->getEmail()) {
 				$main_content .= '
 					<TABLE CELLSPACING=1 CELLPADDING=4 BORDER=0 WIDTH=100%>
@@ -467,15 +461,18 @@ if($config['site']['send_emails'])
 				
 				$codeDate = time();
 				$idAccount = $account->getID();
+				$emailcode = $SQL->prepare("INSERT INTO links (account_id, code, code_date) VALUES (:accid, :ncode , :cdate)");
+               			$emailcode->execute(['accid' => $idAccount, 'ncode'=> $newcode, 'cdate' => $codeDate]);
+				$emailcode = filter_var($emailcode, FILTER_SANITIZE_STRING);
 				$emailcode = $SQL->query("INSERT INTO " . $SQL->tableName('links') . " (" . $SQL->fieldName('account_id') . ", " . $SQL->fieldName('code') . ", " . $SQL->fieldName('code_date') . ") VALUES ('$idAccount', '$newcode', '$codeDate')");
 				
 				if($emailcode) {
 					$mailBody = '
 						<html>
 							<body>
-								<p>Dear '.$config['server']['serverName'].' player,</p>
-								<p>A request for a new password of your ' .$config['server']['serverName']. ' account has been<br />
-								submitted. Please confirm the request at <a href="?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '">?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '</a><br /> 
+								<p>Dear ' . $config['server']['serverName'] . ' player,</p>
+								<p>A request for a new password of your ' . $config['server']['serverName'] . ' account has been<br />
+								submitted. Please confirm the request at <a href="'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation&confirmationkey=' . urlencode($newcode) . '">'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation&confirmationkey=' . urlencode($newcode) . '</a><br />
 								in order to get the password sent to this email address.</p>
 								
 								<p>If clicking on the link does not work in your email program please<br /> 
@@ -484,10 +481,10 @@ if($config['site']['send_emails'])
 								
 								<p>Alternatively, if you should encounter any problems using the above<br />
 								link, please go to<br />
-								<a href="?subtopic=lostaccount&step=confirmation">?subtopic=lostaccount&step=confirmation</a><br />
+								<a href="'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation">'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation</a><br />
 								and confirm the request with your account name and the following<br />
 								confirmation key:<br />
-								' .$newcode. '</p>
+								' . $newcode . '</p>
 								
 								<p>Please note if you do not confirm the request for a new password<br />
 								within the next 24 hours the request will be cancelled and no<br />
@@ -564,7 +561,7 @@ if($config['site']['send_emails'])
 			}
 		}
 		if($_REQUEST['step'] == "email") {
-			$character = trim(stripslashes($_POST['character']));
+   		        $character = trim(stripslashes($_POST['character']));
 			$main_content .= '
 				Enter a valid email address that is not yet used for a Tibia account in the field "New email address" and click on "Submit".<BR>
 				<BR>
@@ -597,25 +594,28 @@ if($config['site']['send_emails'])
 		</TABLE>';
 		}
 		if($_REQUEST['step'] == "email2") {
-			$character = trim(stripslashes($_POST['character']));
-			$email = trim(stripslashes($_POST['email']));
-			
-			$char = new Player();
-			$char->find($character);
-			$account = new Account();
-			$account->loadById($char->getAccountID());
-			
-			$getEmail = $SQL->query("SELECT " . $SQL->fieldName('id') . " FROM " . $SQL->tableName('accounts') . " WHERE " . $SQL->fieldName('email') . " = '$email'")->fetchAll();
-			
-			if(count($getEmail) >= 1)
-				$error = "The new email address is already assigned to an account. Please enter another email address.";
-			
-			if(!isset($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))
-				$error = "Please enter a valid email address.";
-				
-			if(empty($error)) {				
-				$main_content .= '
-					 Please follow the instructions below to change your email address to <B>'.$email.'</B>.
+            $character = trim(stripslashes($_POST['character']));
+            $email = trim(stripslashes($_POST['email']));
+            
+            $char = new Player();
+            $char->find($character);
+            $account = new Account();
+            $account->loadById($char->getAccountID());
+            
+	    $getEmail = filter_var($getEmail, FILTER_SANITIZE_STRING);
+            $getEmail = $SQL->prepare("SELECT `id` FROM `accounts` where email = :email");
+            $getEmail->execute(['email'=> $email]);
+            $getEmail = $getEmail->fetchAll();
+            
+            if (count($getEmail) >= 1)
+                $error = "The new email address is already assigned to an account. Please enter another email address.";
+            
+            if (!isset($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))
+                $error = "Please enter a valid email address.";
+            
+            if (empty($error)) {
+                $main_content .= '
+					 Please follow the instructions below to change your email address to <B>' . $email . '</B>.
 					<OL>
 						<LI>Choose "Yes, change the email address" if you know the recovery key of your Tibia account.</LI>
 						<LI>Enter the recovery key of your Tibia account in the field "Recovery key".</LI>
@@ -704,34 +704,34 @@ if($config['site']['send_emails'])
 			
 			$error = NULL;
 			
-			$character = trim(stripslashes($_POST['character']));
-			$email = trim(stripslashes($_POST['email']));
-			$recoveryKey = trim(stripslashes($_POST['key1'])).'-'.trim(stripslashes($_POST['key2'])).'-'.trim(stripslashes($_POST['key3'])).'-'.trim(stripslashes($_POST['key4']));
-			
-			$char = new Player();
-			$char->find($character);
-			$account = new Account();
-			$account->loadById($char->getAccountID());
-			
-			if($account->getKey() != strtoupper($recoveryKey))
-				$error = "Please enter a valid Recovery Key.";
-			
-			if(empty($error)) {
-				$account->setEmail($email);
-				$account->save();
-				
-				$acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
-				$newpass = NULL;
-				for($i=0; $i < 8; $i++) {
-					$cnum[$i] = $acceptedChars{mt_rand(0, 33)};
-					$newpass .= $cnum[$i];
-				}
-				
-				$account->setPassword($newpass);
-				$account->save();
-				
-				$mailBody = "
-					<p>Dear " .$config['server']['serverName']. " player,</p>
+            $character = trim(stripslashes($_POST['character']));
+            $email = trim(stripslashes($_POST['email']));
+            $recoveryKey = trim(stripslashes($_POST['key1'])) . '-' . trim(stripslashes($_POST['key2'])) . '-' . trim(stripslashes($_POST['key3'])) . '-' . trim(stripslashes($_POST['key4']));
+            
+            $char = new Player();
+            $char->find($character);
+            $account = new Account();
+            $account->loadById($char->getAccountID());
+            
+            if ($account->getKey() != strtoupper($recoveryKey))
+                $error = "Please enter a valid Recovery Key.";
+            
+            if (empty($error)) {
+                $account->setEmail($email);
+                $account->save();
+                
+                $acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
+                $newpass = NULL;
+                for ($i = 0; $i < 8; $i++) {
+                    $cnum[$i] = $acceptedChars{mt_rand(0, 33)};
+                    $newpass .= $cnum[$i];
+                }
+                
+                $account->setPassword($newpass);
+                $account->save();
+                
+                $mailBody = "
+					<p>Dear " . $config['server']['serverName'] . " player,</p>
 
 					<p>The email address of your " .$config['server']['serverName']. " account has been changed.</p>
 					
@@ -861,41 +861,44 @@ if($config['site']['send_emails'])
 		}
 		if($_REQUEST['step'] == "sendboth") {
 			
-			$character = trim(stripslashes($_POST['character']));
-			$email = trim(stripslashes($_POST['email']));
-			
-			$char = new Player();
-			$char->find($character);
-			$account = new Account();
-			$account->loadById($char->getAccountID());
-			
-			if(!isset($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))
-				$error = "Please enter a valid email address.";
-			if($account->getEmail() != $email)
-				$error = "Incorrect email or character name.";
-			
-			if(empty($error))
-			{
-				$acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
-				$newcode = NULL;
-				for($i=0; $i < 20; $i++) {
-					$cnum[$i] = $acceptedChars{mt_rand(0, 33)};
-					$newcode .= $cnum[$i];
-				}
-				
-				$codeDate = time();
-				$idAccount = $account->getID();
-				$emailcode = $SQL->query("INSERT INTO " . $SQL->tableName('links') . " (" . $SQL->fieldName('account_id') . ", " . $SQL->fieldName('code') . ", " . $SQL->fieldName('code_date') . ") VALUES ('$idAccount', '$newcode', '$codeDate')");
-				
-				$mailBody = '
-					<p>Dear '.$config['server']['serverName'].' player,</p>
+            $character = trim(stripslashes($_POST['character']));
+            $email = trim(stripslashes($_POST['email']));
+            
+            $char = new Player();
+            $char->find($character);
+            $account = new Account();
+            $account->loadById($char->getAccountID());
+            
+            if (!isset($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))
+                $error = "Please enter a valid email address.";
+            if ($account->getEmail() != $email)
+                $error = "Incorrect email or character name.";
+            
+            if (empty($error)) {
+                $acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
+                $newcode = NULL;
+                for ($i = 0; $i < 20; $i++) {
+                    $cnum[$i] = $acceptedChars{mt_rand(0, 33)};
+                    $newcode .= $cnum[$i];
+                }
+                
+                $codeDate = time();
+                $idAccount = $account->getID();
+                
+		$emailcode = filter_var($emailcode, FILTER_SANITIZE_STRING);
+                $emailcode = $SQL->prepare("INSERT INTO links (account_id, code, code_date) VALUES (:accid, :code, :code_date)");
+                $emailcode->execute(['accid'=> $idAccount, 'code'=> $newcode, 'code_date'=> $codeDate]);
+                $emailcode = $emailcode->fetchAll();
+                
+                $mailBody = '
+					<p>Dear ' . $config['server']['serverName'] . ' player,</p>
 
 					<p>You have requested both your account name and a new password.<br />
 					Your account name is:<br />
-						'.$account->getName().'</p>
+						' . $account->getName() . '</p>
 					
 					<p>Please confirm the request at<br />
-					   <a href="?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '">?subtopic=lostaccount&step=confirmation&confirmationkey=' .urlencode($newcode). '</a><br />
+					   <a href="'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation&confirmationkey=' . urlencode($newcode) . '">'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation&confirmationkey=' . urlencode($newcode) . '</a><br />
 					in order to get the password sent to this email address.</p>
 					
 					<p>If clicking on the link does not work in your email program please<br />
@@ -904,7 +907,7 @@ if($config['site']['send_emails'])
 					
 					<p>Alternatively, if you should encounter any problems using the above<br />
 					link, please go to<br />
-					   <a href="?subtopic=lostaccount&step=confirmation">?subtopic=lostaccount&step=confirmation</a><br />
+					   <a href="'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation">'. $config['base_url'] . '?subtopic=lostaccount&step=confirmation</a><br />
 					and confirm the request with your account name and the following<br />
 					confirmation key:<br />
 						'.$newcode.'</p>
@@ -1056,31 +1059,37 @@ if($config['site']['send_emails'])
 			if(empty($_POST['confirmationkey']))
 				$error = "Please enter a valid confirmation key.";
 				
-			$key = $SQL->query("SELECT " . $SQL->fieldName('account_id') . " FROM " . $SQL->tableName('links') . " WHERE " . $SQL->fieldName('code') . " = '$confirmationkey'")->fetchAll();
-			
-			if(count($key) == 0)
-				$error = "Please enter a valid confirmation key.";
-				
-			$code_account = $SQL->query("SELECT " . $SQL->fieldName('account_id') . " FROM " . $SQL->tableName('links') . " WHERE " . $SQL->fieldName('account_id') . " = '$accountID'")->fetchAll();
-			
-			if(count($code_account) == 0)
-				$error = "Please enter a valid account name.";
-				
-			if(empty($error)) {
-				
-				$acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
-				$newpass = NULL;
-				for($i=0; $i < 8; $i++) {
-					$cnum[$i] = $acceptedChars{mt_rand(0, 33)};
-					$newpass .= $cnum[$i];
-				}
-				
-				$account->setPassword($newpass);
-				$account->save();
-				
-				$delCode = $SQL->query("DELETE FROM " . $SQL->tableName('links') . " WHERE " . $SQL->fieldName('code') . " = '$confirmationkey'");
-				
-				$mailBody = '
+            $key = $SQL->prepare("SELECT account_id FROM links WHERE code = :confirmation_key");
+            $key->execute(['confirmation_key'=>$confirmationkey]);
+            $key = $key->fetchAll();
+            
+            if (count($key) == 0)
+                $error = "Please enter a valid confirmation key.";
+            
+            $code_account = $SQL->prepare("SELECT account_id FROM links WHERE account_id = :accid");
+            $code_account->execute(['accid'=>$accountID]);
+            $code_account = $code_account->fetchAll();
+            
+            if (count($code_account) == 0)
+                $error = "Please enter a valid account name.";
+            
+            if (empty($error)) {
+                
+                $acceptedChars = '123456789zxcvbnmasdfghjklqwertyuiop';
+                $newpass = NULL;
+                for ($i = 0; $i < 8; $i++) {
+                    $cnum[$i] = $acceptedChars{mt_rand(0, 33)};
+                    $newpass .= $cnum[$i];
+                }
+                
+                $account->setPassword($newpass);
+                $account->save();
+                
+                $delCode = $SQL->prepare("DELETE FROM links WHERE code = :ckey");
+                $delCode->execute(['ckey'=> $confirmationkey]);
+                $delCode = $delCode->fetchAll();
+                
+                $mailBody = '
 						<html>
 							<body>
 								<p>Dear '.$config['server']['serverName'].' player,</p>

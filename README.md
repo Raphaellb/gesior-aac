@@ -72,3 +72,11 @@ or
 ```bash
 sudo service apache2 restart
 ```
+
+## CREDITS
+@marcomoa <br>
+@gesior <br>
+@Felipe Monteiro <br>
+@Talis Tafernaberri Foesten <br>
+@Riicksouzaa <br>
+And more developers

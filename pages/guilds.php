@@ -717,6 +717,7 @@ if($action == "view")
 															<TR BGCOLOR='.$bgcolor.'>
 																<TD><A HREF="?subtopic=characters&name='.urlencode($invited_player->getName()).'">'.htmlspecialchars($invited_player->getName()).'</A></TD>';
 															$invitedID = $invited_player->getId();
+															$getInviteDate = filter_var($getInviteDate, FILTER_SANITIZE_STRING);
 															$getInviteDate = $SQL->query("SELECT `date` FROM `guild_invites` WHERE `player_id` = '$invitedID'")->fetch();
 															$main_content .= '
 																<TD>'.date("M d Y",$getInviteDate['date']).'</TD>
@@ -3432,8 +3433,10 @@ if($action == "resignleadership") {
 					$oldleaderID = $guild_leader_char->getId();
 					$newrank = $guild_leader_char->getRank()->getID();
 					$oldrank = $to_player_rank->getID();
+					$up = filter_var($up, FILTER_SANITIZE_STRING);
 					$up = $SQL->query("UPDATE `guild_membership` SET `rank_id` = '$newrank' WHERE `player_id` = '$newleaderID'");
 					if($up)
+						$up2 = filter_var($up2, FILTER_SANITIZE_STRING);
 						$up2 = $SQL->query("UPDATE `guild_membership` SET `rank_id` = '$oldrank' WHERE `player_id` = '$oldleaderID'");
 					if($up2) {
 						$guild->setOwner($to_player);
