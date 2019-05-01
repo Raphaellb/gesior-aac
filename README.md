@@ -1,12 +1,5 @@
 ## Gesior-AAC
 
-#### PT-BR
-* Bem vindo ao tutorial de instalação.
-* Lembrando que o Projeto todo em si não é de minha autoria ele tem diversos participantes.
-* Essa se trata de uma versão Estável do produto, isso não a deixa livre de bugs.
-* Se encontrar bugs ou tiver interesse que seja desenvolvido alguma nova funcionalidade fique a vontade para abrir um Issue.
-* Sem mais delongas segue o tutorial.
-
 #### EN
 * Welcome to the installation tutorial.
 * Remembering that the Project itself is not my own, it has several participants.
@@ -76,7 +69,8 @@ sudo service apache2 restart
 ## CREDITS
 @marcomoa <br>
 @gesior <br>
+@talistf <br>
+@riicksouzaa <br>
 @Felipe Monteiro <br>
-@Talis Tafernaberri Foesten <br>
-@Riicksouzaa <br>
+
 And more developers
