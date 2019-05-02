@@ -47,7 +47,7 @@
 
 if(!isset($_REQUEST['ServiceCategoryID']) || $_REQUEST['ServiceCategoryID'] == "")
 	$serviceCategoryId = 2;
-else $serviceCategoryId = $_REQUEST['ServiceCategoryID'];
+else $serviceCategoryId = (int) $_REQUEST['ServiceCategoryID'];
 
 $doubleStatus = $SQL->query("SELECT `value` FROM `server_config` WHERE `config` = 'double'")->fetch();
 $main_content .= '
