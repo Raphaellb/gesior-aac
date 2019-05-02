@@ -21,7 +21,9 @@ if (DEBUG_DATABASE)
 
 if(isset($_REQUEST['tcode'])){
     $tcode = $_REQUEST['tcode'];
-    $code_status = $SQL->query("SELECT * FROM `pagseguro_transactions` WHERE `transaction_code` = '{$tcode}'")->fetchAll();
+    $code_query = $SQL->prepare("SELECT * FROM `pagseguro_transactions` WHERE `transaction_code` = :tcode");
+    $code_query->execute(['tcode' => $tcode]);
+    $code_status = $code_query->fetchAll();
     $count = count($code_status);
     $code_status = $code_status[0];
     if($count > 0){
