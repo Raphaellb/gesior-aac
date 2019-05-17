@@ -4791,17 +4791,20 @@ else {
                     $main_content .= '>' . htmlspecialchars($vocation_name[$char_vocation_key]) . '</td></tr>';
                 }
                 $main_content .= '</table></table></td>';
-            }
+			}
+			
             if (count($config['site']['newchar_towns']) > 1) {
                 $main_content .= '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your city:</b></td><td><table class="TableContent" width="100%" >';
-                foreach ($config['site']['newchar_towns'] as $town_id) {
+                foreach ($config['site']['newchar_towns'] as $town_id => $name_town) {
+					
                     $main_content .= '<tr><td><input type="radio" name="newchartown" value="' . $town_id . '" ';
                     if ($newchar_town == $town_id)
                         $main_content .= 'checked="checked" ';
                     $main_content .= '>' . htmlspecialchars($towns_list[$town_id]) . '</td></tr>';
                 }
                 $main_content .= '</table></table></td>';
-            }
+			}
+			
             if (count($config['site']['newchar_towns']) > 1 || count($config['site']['newchar_vocations']) > 1)
                 $main_content .= '</tr></table></div>';
             $main_content .= '</table></div></td></tr><br/><table style="width:100%;" ><tr align="center" ><td><table border="0" cellspacing="0" cellpadding="0" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url(' . $layout_name . '/images/global/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $layout_name . '/images/global/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Submit" alt="Submit" src="' . $layout_name . '/images/global/buttons/_sbutton_submit.gif" ></div></div></td><tr></form></table></td><td><table border="0" cellspacing="0" cellpadding="0" ><form action="?subtopic=accountmanagement" method="post" ><tr><td style="border:0px;" ><div class="BigButton" style="background-image:url(' . $layout_name . '/images/global/buttons/sbutton.gif)" ><div onMouseOver="MouseOverBigButton(this);" onMouseOut="MouseOutBigButton(this);" ><div class="BigButtonOver" style="background-image:url(' . $layout_name . '/images/global/buttons/sbutton_over.gif);" ></div><input class="ButtonText" type="image" name="Back" alt="Back" src="' . $layout_name . '/images/global/buttons/_sbutton_back.gif" ></div></div></td></tr></form></table></td></tr></table>';
@@ -4828,7 +4831,7 @@ else {
                 if ($newchar_sex != 1 && $newchar_sex != "0")
                     $newchar_errors[] = 'Sex must be equal <b>0 (female)</b> or <b>1 (male)</b>.';
                 if (count($config['site']['newchar_vocations']) > 1) {
-                    $newchar_vocation_check = FALSE;
+					$newchar_vocation_check = FALSE;
                     foreach ($config['site']['newchar_vocations'] as $char_vocation_key => $sample_char)
                         if ($newchar_vocation == $char_vocation_key)
                             $newchar_vocation_check = TRUE;
@@ -4872,7 +4875,9 @@ else {
                     $char_to_copy->setBalance(0);
                     $char_to_copy->setCreateIP(Visitor::getIP());
                     $char_to_copy->setCreateDate(time());
-                    $char_to_copy->setSave(); // make character saveable
+					$char_to_copy->setSave(); // make character saveable
+					if(isset($_POST['newchartown']))
+						$char_to_copy->setTown($_POST['newchartown']);
                     $char_to_copy->save(); // now it will load 'id' of new player
                 if ($char_to_copy->isLoaded()) {
                     $char_to_copy->saveItems();
@@ -4883,7 +4888,7 @@ else {
                 } else {
                     echo "Error. Can\'t create character. Probably problem with database. Try again or contact with admin.";
                     exit;
-                }
+				}
             } else {
                 $main_content .= '
                         <script>
@@ -4957,16 +4962,17 @@ else {
                 if (count($config['site']['newchar_vocations']) > 1) {
                     $main_content .= '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your vocation:</b></td><td><table class="TableContent" width="100%" >';
                     foreach ($config['site']['newchar_vocations'] as $char_vocation_key => $sample_char) {
-                        $main_content .= '<tr><td><input type="radio" name="newcharvocation" value="' . htmlspecialchars($char_vocation_key) . '" ';
+						$main_content .= '<tr><td><input type="radio" name="newcharvocation" value="' . htmlspecialchars($char_vocation_key) . '" ';
+						
                         if ($newchar_vocation == $char_vocation_key)
                             $main_content .= 'checked="checked" ';
-                        $main_content .= '>'.htmlspecialchars($vocation_name[$char_vocation_key]).'</td></tr>';
+                        $main_content .= '>' . htmlspecialchars($vocation_name[$char_vocation_key]) . '</td></tr>';
                     }
                     $main_content .= '</table></table></td>';
                 }
                 if (count($config['site']['newchar_towns']) > 1) {
                     $main_content .= '<td><table class="TableContent" width="100%" ><tr class="Odd" valign="top"><td width="160"><br /><b>Select your city:</b></td><td><table class="TableContent" width="100%" >';
-                    foreach ($config['site']['newchar_towns'] as $town_id) {
+                    foreach ($config['site']['newchar_towns'] as $town_id => $name_town) {
                         $main_content .= '<tr><td><input type="radio" name="newchartown" value="' . htmlspecialchars($town_id) . '" ';
                         if ($newchar_town == $town_id)
                             $main_content .= 'checked="checked" ';
