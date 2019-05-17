@@ -505,54 +505,83 @@ if(!defined('INITIALIZED'))
                     </div>
                     <script>InitializePage();</script>
                 </div>
-<div id="ContentColumn">
-<div id="Content" class="Content">
-<div id="ContentHelper">
-<div id="" class="Box">
-<div class="Corner-tl" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-tl.gif);"></div>
-<div class="Corner-tr" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-tr.gif);"></div>
-<div class="Border_1" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/border-1.gif);"></div>
-<div class="BorderTitleText" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/newsheadline_background.gif); height: 28px;">
-<div class="InfoBar">
-&nbsp;
-<a href="#" target="_blank" style="text-decoration:none" onclick="document.getElementById('pop').style.display='block';">
-	<img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/discordapp.png">
-	<span class="InfoBarNumbers">
-	<span class="InfoBarSmallElement">Discord</span>
-</span>
-</a>
-&nbsp;&nbsp;&nbsp;&nbsp;
-<a style="text-decoration:none" href="?subtopic=downloadclient&step=downloadagreement">
-<img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/icon-download.png">
-<span class="InfoBarNumbers">
-<span class="InfoBarSmallElement">Download Client</span>
-</span>
-</a>
-<a style="float:right;text-decoration:none;"  href="?subtopic=worlds">
-<img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/icon-players-online.png">
-<span class="InfoBarNumbers">
-<span class="InfoBarSmallElement">
-<?php
-					if($config['status']['serverStatus_online'] == 1)
-						$players_online1 = $config['status']['serverStatus_players'].' Players Online&nbsp;';
-					else
-						$players_online1 = ' Server Offline&nbsp;';
-				?>
-<?php echo $players_online1; ?>
-</span>
-</span>
-</a>
-</div>
-</div>
-<div class="Border_1" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/border-1.gif);">
-</div>
-<div class="CornerWrapper-b">
-<div class="Corner-bl" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-bl.gif);"></div>
-</div>
-<div class="CornerWrapper-b"><div class="Corner-br" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-br.gif);">
-</div>
-</div>
-</div>			
+                <div id="ContentColumn">
+                        <div id="Content" class="Content">
+                            <div id="ContentHelper">
+                                <div id="preload">
+                                    <?php
+        
+                                    if ( ! session_id() ) @ session_start();
+        
+                                    $last = null;
+                                    if (!isset($_SESSION)) {
+                                        $_SESSION = [];
+                                    }
+        
+                                    if (isset($_SESSION['server_status_last_check'])) {
+                                        $last = $_SESSION['server_status_last_check'];
+                                    }
+                                    if ($last == null || time() > $last + 30) {
+                                        $_SESSION['server_status_last_check'] = time();
+                                        $_SESSION['server_status'] = $config['status']['serverStatus_online'];
+                                    }
+                                    
+                                    $infobar = Website::getWebsiteConfig()->getValue('info_bar_active');
+        
+                                    if($_SESSION['server_status'] == 1){
+                                        $qtd_players_online = $SQL->prepare("SELECT count(*) as total from `players_online`");
+                                        $qtd_players_online->execute([]);
+                                        $qtd_players_online = $qtd_players_online->fetch();
+                                        if($qtd_players_online["total"] == "1"){
+                                            $players_online = ($infobar ? $qtd_players_online["total"].' Player Online' : $qtd_players_online["total"].'<br/>Player Online');
+                                        }else{
+                                            $players_online = ($infobar ? $qtd_players_online["total"].' Players Online' : $qtd_players_online["total"].'<br/>Players Online');
+                                        }
+                                    }
+                                    else{
+                                        $players_online = ($infobar ? 'Server Offline' : 'Server<br/>Offline');
+                                    }
+                                    ?>
+                                    <div id="PlayersOnline" class="Box">
+                                        <div class="Corner-tl" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-tl.gif);"></div>
+                                        <div class="Corner-tr" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-tr.gif);"></div>
+                                        <div class="Border_1" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/border-1.gif);"></div>
+                                        <div class="BorderTitleText" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/newsheadline_background.gif); height: 28px;">
+                                            <div class="InfoBar">
+                                                    <?php
+                                                    $playersCast = $SQL->prepare("SELECT count(*) as `players_cast`, sum(`spectators`) as `spectators` FROM `live_casts`");
+                                                    $playersCast->execute([]);
+                                                    $playersCast = $playersCast->fetchAll();
+                                                    ?>
+                                                    <a class="InfoBarBlock" href="?subtopic=castsystem">
+                                                        <img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/icon-cast.png">
+                                                        <span class="InfoBarNumbers" <?php if($_REQUEST['subtopic'] == 'characters' && $_REQUEST['name']){ echo "style='top:0'"; }?>><img class="InfoBarSmallElement" src="<?php echo $layout_name; ?>/images/global/header/info/icon-streamers.png">
+                                                            <span class="InfoBarSmallElement"><?= (isset($playersCast['players_cast']) == null ? 0 : $playersCast['players_cast'])  ?></span><img class="InfoBarSmallElement" src="<?php echo $layout_name; ?>/images/global/header/info/icon-viewers.png">
+                                                            <span class="InfoBarSmallElement"><?= (isset($playersCast['spectators']) == 0 ? 0 : $playersCast['spectators']) ?></span>
+                                                        </span>
+                                                    </a>
+                                                    <a href="?subtopic=downloadclient&step=downloadagreement">
+                                                        <img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/icon-download.png">
+                                                        <span class="InfoBarNumbers" <?php if($_REQUEST['subtopic'] == 'characters' && $_REQUEST['name']){ echo "style='top:0'"; }?>>
+                                                            <span class="InfoBarSmallElement">Download Client</span>
+                                                    </span>
+                                                </a>
+                                                <a style="float: right" href="?subtopic=worlds">
+                                                    <img class="InfoBarBigLogo" src="<?php echo $layout_name; ?>/images/global/header/info/icon-players-online.png">
+                                                    <span class="InfoBarNumbers" <?php if($_REQUEST['subtopic'] == 'characters' && $_REQUEST['name']){ echo "style='top:0'"; }?>>
+                                                        <span class="InfoBarSmallElement show_online_data"><?php echo $players_online; ?></span>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="Border_1" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/border-1.gif);"></div>
+                                        <div class="CornerWrapper-b">
+                                            <div class="Corner-bl" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-bl.gif);"></div>
+                                        </div>
+                                        <div class="CornerWrapper-b">
+                                            <div class="Corner-br" style="background-image:url(<?php echo $layout_name; ?>/images/global/content/corner-br.gif);"></div>
+                                        </div>
+                                    </div>
                             <script type="text/javascript" src="<?php echo $layout_name; ?>/js/newsticker.js"></script>
                             <?php echo $news_content; ?>
                             <div id="NewsArchive" class="Box">
