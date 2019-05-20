@@ -33,6 +33,9 @@ if ($is_https) {
 $config['base_url'] = $base_url;
 $config['site']['base_url'] = $base_url;
 
+# Info Bar Config
+$config['site']['info_bar_active'] = true;
+
 # Using Ajax Field Validation, this is important if you want to use ajax check in your create account.
 $config['site']['sqlHost'] = "localhost";
 $config['site']['sqlUser'] = "root";
